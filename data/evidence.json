@@ -1,0 +1,161 @@
+{
+    "PreguntasCerradas" : {
+        "1. ¿Cuál de los siguientes es un recurso literario de comparación directa?" : {
+            "a" : "a) Metáfora",
+            "b" : "b) Hipérbole",
+            "c" : "c) Símil",
+            "d" : "d) Personificación" 
+        },
+        "2. El propósito principal de un ensayo académico es:" : {
+            "a" : "a) Narrar una historia",
+            "b" : "b) Argumentar una idea",
+            "c" : "c) Describir un objeto",
+            "d" : "d) Expresar sentimientos"
+        },
+        "3. El movimiento literario del Romanticismo se caracteriza por:" : {
+            "a" : "a) Resaltar la razón sobre la emoción",
+            "b" : "b) Enfatizar la libertad y el sentimiento",
+            "c" : "c) Basarse en la exactitud científica",
+            "d" : "d) Eliminar la subjetividad"
+        },
+
+        "4. La derivada de: 𝑓(𝑥)=𝑥3f(x)=x3: ": {
+            "a" : "a) 3𝑥23x2",
+            "b" : "b) 𝑥2x2",
+            "c" : "c) 3𝑥33x3",
+            "d" : "d) 𝑥3+1x3+1"
+            
+        },
+
+        "5. La solución de la ecuación 2 𝑥 − 5 = 9 2x−5=9 es: ": {
+            "a" : "a) 2",
+            "b" : "b) 5",
+            "c" : "c) 7",
+            "d" : "d) 14"
+            
+        },
+
+        "6. El número irracional entre los siguientes es: ": {
+            "a" : "a) 3443",
+            "b" : "b) 22",
+            "c" : "c) -7",
+            "d" : "d) 1.25"
+            
+        },
+
+        "7. La molécula responsable del almacenamiento de la información genética es:": {
+            "a" : "a) ARN",
+            "b" : "b) ADN",
+            "c" : "c) Proteínas",
+            "d" : "d) Lípidos"
+            
+        },
+
+        "8. La fuerza de gravedad fue explicada por:": {
+            "a" : "a) Galileo Galilei",
+            "b" : "b) Isaac Newton",
+            "c" : "c) Albert Einstein",
+            "d" : "d) Marie Curie"
+            
+        },
+
+        "9. ¿Cuál de los siguientes es un ejemplo de energía renovable?": {
+            "a" : "a) Carbón",
+            "b" : "b) Petróleo",
+            "c" : "c) Energía solar",
+            "d" : "d) Gas natural"
+            
+        },
+
+        "10. La Primera Guerra Mundial se desarrolló entre los años:": {
+            "a" : "a) 1914 – 1918",
+            "b" : "b) 1939 – 1945",
+            "c" : "c) 1900 – 1910",
+            "d" : "d) 1920 – 1930"
+            
+        },
+
+        "11. El sistema económico basado en la propiedad privada de los medios de producción se llama:": {
+            "a" : "a) Socialismo",
+            "b" : "b) Comunismo",
+            "c" : "c) Capitalismo",
+            "d" : "d) Mercantilismo"
+            
+        },
+
+        "12. El actual territorio de Colombia fue colonizado por:": {
+            "a" : "a) Ingleses",
+            "b" : "b) Españoles",
+            "c" : "c) Portugueses",
+            "d" : "d) Franceses"
+            
+        },
+
+        "13. Choose the correct option: “She __ to school every day": {
+            "a" : "a) go",
+            "b" : "b) goes",
+            "c" : "c) going",
+            "d" : "d) goed"
+            
+        },
+
+        "14. The past tense of the verb “buy” is:": {
+            "a" : "a) buied",
+            "b" : "b) buyed",
+            "c" : "c) bought",
+            "d" : "d) buys"
+            
+        },
+
+        "15. “I have lived here __ five years.” (Correct preposition)": {
+            "a" : "a) since",
+            "b" : "b) for",
+            "c" : "c) during",
+            "d" : "d) by"
+            
+        },
+
+        "16. ¿Cuál es el planeta más cercano al Sol?": {
+            "a" : "a) Venus",
+            "b" : "b) Mercurio",
+            "c" : "c) Marte",
+            "d" : "d) Júpiter"
+            
+        },
+
+        "17. ¿En qué continente se encuentra Egipto?": {
+            "a" : "a) Asia",
+            "b" : "b) África",
+            "c" : "c) Europa",
+            "d" : "d) Oceanía"
+            
+        },
+
+        "18. ¿Qué instrumento mide la presión atmosférica?": {
+            "a" : "a) Termómetro",
+            "b" : "b) Anemómetro",
+            "c" : "c) Barómetro",
+            "d" : "d) Pluviómetro"
+            
+        },
+
+        "19. El autor de “Cien años de soledad” es:": {
+            "a" : "a) Mario Vargas Llosa",
+            "b" : "b) Gabriel García Márquez",
+            "c" : "c) Pablo Neruda",
+            "d" : "d) Jorge Luis Borges"
+            
+        },
+
+        "20. El símbolo químico del oxígeno es:": {
+            "a" : "a) O",
+            "b" : "b) Ox",
+            "c" : "c) Og",
+            "d" : "d) Oz"
+            
+        }
+
+    },
+    "PreguntasAbiertas": {},
+    "PreguntasEnsayo": {}
+}
