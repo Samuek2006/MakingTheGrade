@@ -1,7 +1,6 @@
 import modules.mainMenu as menu
 import json
 
-
 def main():
     while True:
         try:
@@ -12,7 +11,7 @@ def main():
             print("❌ Error: Ingresa un valor válido.")
 
         except FileNotFoundError:
-            print("❌ Error: No se encontró la base de datos (CampusLands.json).")
+            print("❌ Error: No se encontró la base de datos (user.json).")
             break
 
         except json.JSONDecodeError:
