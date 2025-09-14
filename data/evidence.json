@@ -1,161 +1,308 @@
 {
-    "PreguntasCerradas" : {
-        "1. ¿Cuál de los siguientes es un recurso literario de comparación directa?" : {
-            "a" : "a) Metáfora",
-            "b" : "b) Hipérbole",
-            "c" : "c) Símil",
-            "d" : "d) Personificación" 
+    "PreguntasCerradas": [
+        {
+            "id": "Q1",
+            "text": "¿Cuál de los siguientes es un recurso literario de comparación directa?",
+            "options": {
+                "a": "Metáfora",
+                "b": "Hipérbole",
+                "c": "Símil",
+                "d": "Personificación"
+            },
+            "correct": "c",
+            "points": 1
         },
-        "2. El propósito principal de un ensayo académico es:" : {
-            "a" : "a) Narrar una historia",
-            "b" : "b) Argumentar una idea",
-            "c" : "c) Describir un objeto",
-            "d" : "d) Expresar sentimientos"
+        {
+            "id": "Q2",
+            "text": "El propósito principal de un ensayo académico es:",
+            "options": {
+                "a": "Narrar una historia",
+                "b": "Argumentar una idea",
+                "c": "Describir un objeto",
+                "d": "Expresar sentimientos"
+            },
+            "correct": "b",
+            "points": 1
         },
-        "3. El movimiento literario del Romanticismo se caracteriza por:" : {
-            "a" : "a) Resaltar la razón sobre la emoción",
-            "b" : "b) Enfatizar la libertad y el sentimiento",
-            "c" : "c) Basarse en la exactitud científica",
-            "d" : "d) Eliminar la subjetividad"
+        {
+            "id": "Q3",
+            "text": "El movimiento literario del Romanticismo se caracteriza por:",
+            "options": {
+                "a": "Resaltar la razón sobre la emoción",
+                "b": "Enfatizar la libertad y el sentimiento",
+                "c": "Basarse en la exactitud científica",
+                "d": "Eliminar la subjetividad"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "4. La derivada de: 𝑓(𝑥)=𝑥3f(x)=x3: ": {
-            "a" : "a) 3𝑥23x2",
-            "b" : "b) 𝑥2x2",
-            "c" : "c) 3𝑥33x3",
-            "d" : "d) 𝑥3+1x3+1"
-            
+        {
+            "id": "Q4",
+            "text": "La derivada de f(x) = x³ es:",
+            "options": {
+                "a": "3x²",
+                "b": "x²",
+                "c": "3x³",
+                "d": "x³+1"
+            },
+            "correct": "a",
+            "points": 1
         },
-
-        "5. La solución de la ecuación 2 𝑥 − 5 = 9 2x−5=9 es: ": {
-            "a" : "a) 2",
-            "b" : "b) 5",
-            "c" : "c) 7",
-            "d" : "d) 14"
-            
+        {
+            "id": "Q5",
+            "text": "La solución de la ecuación 2x − 5 = 9 es:",
+            "options": {
+                "a": "2",
+                "b": "5",
+                "c": "7",
+                "d": "14"
+            },
+            "correct": "c",
+            "points": 1
         },
-
-        "6. El número irracional entre los siguientes es: ": {
-            "a" : "a) 3443",
-            "b" : "b) 22",
-            "c" : "c) -7",
-            "d" : "d) 1.25"
-            
+        {
+            "id": "Q6",
+            "text": "El número irracional entre los siguientes es:",
+            "options": {
+                "a": "3443",
+                "b": "22",
+                "c": "-7",
+                "d": "1.25"
+            },
+            "correct": "ninguno",
+            "points": 1
         },
-
-        "7. La molécula responsable del almacenamiento de la información genética es:": {
-            "a" : "a) ARN",
-            "b" : "b) ADN",
-            "c" : "c) Proteínas",
-            "d" : "d) Lípidos"
-            
+        {
+            "id": "Q7",
+            "text": "La molécula responsable del almacenamiento de la información genética es:",
+            "options": {
+                "a": "ARN",
+                "b": "ADN",
+                "c": "Proteínas",
+                "d": "Lípidos"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "8. La fuerza de gravedad fue explicada por:": {
-            "a" : "a) Galileo Galilei",
-            "b" : "b) Isaac Newton",
-            "c" : "c) Albert Einstein",
-            "d" : "d) Marie Curie"
-            
+        {
+            "id": "Q8",
+            "text": "La fuerza de gravedad fue explicada por:",
+            "options": {
+                "a": "Galileo Galilei",
+                "b": "Isaac Newton",
+                "c": "Albert Einstein",
+                "d": "Marie Curie"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "9. ¿Cuál de los siguientes es un ejemplo de energía renovable?": {
-            "a" : "a) Carbón",
-            "b" : "b) Petróleo",
-            "c" : "c) Energía solar",
-            "d" : "d) Gas natural"
-            
+        {
+            "id": "Q9",
+            "text": "¿Cuál de los siguientes es un ejemplo de energía renovable?",
+            "options": {
+                "a": "Carbón",
+                "b": "Petróleo",
+                "c": "Energía solar",
+                "d": "Gas natural"
+            },
+            "correct": "c",
+            "points": 1
         },
-
-        "10. La Primera Guerra Mundial se desarrolló entre los años:": {
-            "a" : "a) 1914 – 1918",
-            "b" : "b) 1939 – 1945",
-            "c" : "c) 1900 – 1910",
-            "d" : "d) 1920 – 1930"
-            
+        {
+            "id": "Q10",
+            "text": "La Primera Guerra Mundial se desarrolló entre los años:",
+            "options": {
+                "a": "1914 – 1918",
+                "b": "1939 – 1945",
+                "c": "1900 – 1910",
+                "d": "1920 – 1930"
+            },
+            "correct": "a",
+            "points": 1
         },
-
-        "11. El sistema económico basado en la propiedad privada de los medios de producción se llama:": {
-            "a" : "a) Socialismo",
-            "b" : "b) Comunismo",
-            "c" : "c) Capitalismo",
-            "d" : "d) Mercantilismo"
-            
+        {
+            "id": "Q11",
+            "text": "El sistema económico basado en la propiedad privada de los medios de producción se llama:",
+            "options": {
+                "a": "Socialismo",
+                "b": "Comunismo",
+                "c": "Capitalismo",
+                "d": "Mercantilismo"
+            },
+            "correct": "c",
+            "points": 1
         },
-
-        "12. El actual territorio de Colombia fue colonizado por:": {
-            "a" : "a) Ingleses",
-            "b" : "b) Españoles",
-            "c" : "c) Portugueses",
-            "d" : "d) Franceses"
-            
+        {
+            "id": "Q12",
+            "text": "El actual territorio de Colombia fue colonizado por:",
+            "options": {
+                "a": "Ingleses",
+                "b": "Españoles",
+                "c": "Portugueses",
+                "d": "Franceses"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "13. Choose the correct option: “She __ to school every day": {
-            "a" : "a) go",
-            "b" : "b) goes",
-            "c" : "c) going",
-            "d" : "d) goed"
-            
+        {
+            "id": "Q13",
+            "text": "Choose the correct option: “She __ to school every day”",
+            "options": {
+                "a": "go",
+                "b": "goes",
+                "c": "going",
+                "d": "goed"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "14. The past tense of the verb “buy” is:": {
-            "a" : "a) buied",
-            "b" : "b) buyed",
-            "c" : "c) bought",
-            "d" : "d) buys"
-            
+        {
+            "id": "Q14",
+            "text": "The past tense of the verb “buy” is:",
+            "options": {
+                "a": "buied",
+                "b": "buyed",
+                "c": "bought",
+                "d": "buys"
+            },
+            "correct": "c",
+            "points": 1
         },
-
-        "15. “I have lived here __ five years.” (Correct preposition)": {
-            "a" : "a) since",
-            "b" : "b) for",
-            "c" : "c) during",
-            "d" : "d) by"
-            
+        {
+            "id": "Q15",
+            "text": "“I have lived here __ five years.” (Correct preposition)",
+            "options": {
+                "a": "since",
+                "b": "for",
+                "c": "during",
+                "d": "by"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "16. ¿Cuál es el planeta más cercano al Sol?": {
-            "a" : "a) Venus",
-            "b" : "b) Mercurio",
-            "c" : "c) Marte",
-            "d" : "d) Júpiter"
-            
+        {
+            "id": "Q16",
+            "text": "¿Cuál es el planeta más cercano al Sol?",
+            "options": {
+                "a": "Venus",
+                "b": "Mercurio",
+                "c": "Marte",
+                "d": "Júpiter"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "17. ¿En qué continente se encuentra Egipto?": {
-            "a" : "a) Asia",
-            "b" : "b) África",
-            "c" : "c) Europa",
-            "d" : "d) Oceanía"
-            
+        {
+            "id": "Q17",
+            "text": "¿En qué continente se encuentra Egipto?",
+            "options": {
+                "a": "Asia",
+                "b": "África",
+                "c": "Europa",
+                "d": "Oceanía"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "18. ¿Qué instrumento mide la presión atmosférica?": {
-            "a" : "a) Termómetro",
-            "b" : "b) Anemómetro",
-            "c" : "c) Barómetro",
-            "d" : "d) Pluviómetro"
-            
+        {
+            "id": "Q18",
+            "text": "¿Qué instrumento mide la presión atmosférica?",
+            "options": {
+                "a": "Termómetro",
+                "b": "Anemómetro",
+                "c": "Barómetro",
+                "d": "Pluviómetro"
+            },
+            "correct": "c",
+            "points": 1
         },
-
-        "19. El autor de “Cien años de soledad” es:": {
-            "a" : "a) Mario Vargas Llosa",
-            "b" : "b) Gabriel García Márquez",
-            "c" : "c) Pablo Neruda",
-            "d" : "d) Jorge Luis Borges"
-            
+        {
+            "id": "Q19",
+            "text": "El autor de “Cien años de soledad” es:",
+            "options": {
+                "a": "Mario Vargas Llosa",
+                "b": "Gabriel García Márquez",
+                "c": "Pablo Neruda",
+                "d": "Jorge Luis Borges"
+            },
+            "correct": "b",
+            "points": 1
         },
-
-        "20. El símbolo químico del oxígeno es:": {
-            "a" : "a) O",
-            "b" : "b) Ox",
-            "c" : "c) Og",
-            "d" : "d) Oz"
-            
+        {
+            "id": "Q20",
+            "text": "El símbolo químico del oxígeno es:",
+            "options": {
+                "a": "O",
+                "b": "Ox",
+                "c": "Og",
+                "d": "Oz"
+            },
+            "correct": "a",
+            "points": 1
         }
-
-    },
-    "PreguntasAbiertas": {},
-    "PreguntasEnsayo": {}
+    ],
+    "PreguntasCortas": [
+        {
+            "id": "PC1",
+            "text": "Explica con tus propias palabras qué es una metáfora y da un ejemplo.",
+            "max_points": 2,
+            "topic": "Lengua y Literatura"
+        },
+        {
+            "id": "PC2",
+            "text": "Resuelve la ecuación: 3x + 7 = 16. Escribe solo el valor de x.",
+            "max_points": 1,
+            "topic": "Matemáticas"
+        },
+        {
+            "id": "PC3",
+            "text": "Menciona dos características principales del Romanticismo literario.",
+            "max_points": 2,
+            "topic": "Literatura"
+        },
+        {
+            "id": "PC4",
+            "text": "Traduzca al inglés: 'Ella estudia todos los días en la biblioteca'.",
+            "max_points": 2,
+            "topic": "Inglés"
+        },
+        {
+            "id": "PC5",
+            "text": "¿Cuál es la capital de Egipto?",
+            "max_points": 1,
+            "topic": "Geografía"
+        }
+    ],
+    "PreguntasEnsayo": [
+        {
+            "id": "PE1",
+            "text": "Redacta un ensayo corto sobre la importancia de la argumentación en los ensayos académicos. Incluye introducción, desarrollo y conclusión.",
+            "max_points": 5,
+            "topic": "Redacción Académica"
+        },
+        {
+            "id": "PE2",
+            "text": "Explica cómo la teoría de la gravitación de Newton cambió la visión del universo en su época. Usa ejemplos históricos.",
+            "max_points": 5,
+            "topic": "Ciencias / Historia"
+        },
+        {
+            "id": "PE3",
+            "text": "Describe los beneficios y retos del uso de energías renovables en el mundo actual. Argumenta tu posición.",
+            "max_points": 5,
+            "topic": "Ciencias Naturales"
+        },
+        {
+            "id": "PE4",
+            "text": "Escribe un ensayo sobre cómo la Primera Guerra Mundial transformó la política y sociedad en Europa.",
+            "max_points": 5,
+            "topic": "Historia"
+        },
+        {
+            "id": "PE5",
+            "text": "¿Cómo influye el aprendizaje del inglés en las oportunidades académicas y laborales en la actualidad? Desarrolla tu opinión.",
+            "max_points": 5,
+            "topic": "Inglés"
+        }
+    ]
 }
