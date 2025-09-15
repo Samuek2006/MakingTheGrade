@@ -1,0 +1,20 @@
+{
+    "Resultados": {
+        "Cerradas": {},
+        "Cortas": {
+            "anonimo": {
+                "datetime": "2025-09-15T18:47:26",
+                "answers": {
+                    "PC1": "Una metáfora es una figura literaria que consiste en comparar o identificar algo con otra cosa distinta para resaltar sus características, sin usar palabras como “como” o “parece”. Por ejemplo: decir “tus ojos son dos luceros” no significa que literalmente sean estrellas, sino que se comparan con ellas para expresar brillo y belleza",
+                    "PC2": "x = 3",
+                    "PC3": "El Romanticismo literario se caracteriza principalmente por la exaltación de los sentimientos y la subjetividad del individuo, así como por el interés en la naturaleza y lo sobrenatural como reflejo del mundo interior del ser humano",
+                    "PC4": "She studies every day in the library",
+                    "PC5": "La capital de Egipto es El Cairo"
+                },
+                "total_questions": 5
+            }
+        },
+        "Ensayo": {}
+    },
+    "Qualifer_ensayos": {}
+}
