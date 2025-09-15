@@ -440,7 +440,7 @@ def calificarPreguntas(preguntas: list, respuestas: dict):
     for i, q in enumerate(preguntas, start=1):
         idPregunta = q.get("id", f"Q{i}")
         preguntasCorrectas = str(q.get("correct", "")).strip().lower()
-        puntosCorrectos = int(q.get("points", 1))
+        puntosCorrectos = int(q.get("points ", 1))
         total += puntosCorrectos
 
         user = str(respuestas.get(idPregunta, "")).strip().lower()
