@@ -1,6 +1,11 @@
 import util.corefiles as corefiles
 
 DB_Users = 'data/user.json'
+corefiles.initialize_json(DB_Users, {
+    "admins" : {},
+    "qualifiers" : {},
+    "students" : {}
+})
 
 def menuAdmin():
     pass

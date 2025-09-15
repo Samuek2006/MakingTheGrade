@@ -29,7 +29,8 @@ def menuStudent():
                     util.Limpiar_consola()
 
                 case 2:
-                    print("🔧 Próximamente: Preguntas Abiertas")
+                    util.Limpiar_consola()
+                    pruebaCorta(DB_Prueba)
                     util.Stop()
                     util.Limpiar_consola()
 
@@ -94,7 +95,7 @@ def pruebaSeleccion(DB_Prueba: str):
             idPregunta = pregunta.get("id", f"Q{index+1}")
             textoPregunta = pregunta.get("text", "Pregunta sin texto")
             opcionesPreguntas = pregunta.get("options", {})
-            ya = respuestas.get(idPregunta)
+            repuestaUser = respuestas.get(idPregunta)
 
             util.Limpiar_consola()
             print(f"📌 Pregunta {index+1}/{total}")
@@ -105,8 +106,8 @@ def pruebaSeleccion(DB_Prueba: str):
                 if k in opcionesPreguntas:
                     print(f"  {k}) {opcionesPreguntas[k]}")
 
-            if ya:
-                print(f"\n✅ Respuesta guardada: {ya}")
+            if repuestaUser:
+                print(f"\n✅ Respuesta guardada: {repuestaUser}")
 
             print("\n👉 Escribe a/b/c/d para responder (auto-avanza)")
             print("   'n' = siguiente | 'p' = anterior | 'f' = finalizar y calificar | 'q' = salir sin calificar")
@@ -157,6 +158,84 @@ def pruebaSeleccion(DB_Prueba: str):
             else:
                 print("❌ Opción inválida.")
                 util.Stop()
+
+        except KeyboardInterrupt:
+            print("\n⛔ Interrupción detectada (Ctrl+C). Cerrando.")
+            return None
+        except EOFError:
+            print("\n⛔ Entrada inesperada (Ctrl+D / Ctrl+Z). Cerrando.")
+            return None
+        except Exception as e:
+            print(f"❌ Error inesperado: {e}")
+            util.Stop()
+
+def pruebaCorta(DB_Prueba: str):
+    data = corefiles.read_json(DB_Prueba)
+    preguntas = data.get("PreguntasCortas", [])
+    total = len(preguntas)
+
+    if total == 0:
+        print("⚠️ No hay preguntas disponibles en PreguntasCortas.")
+        return None
+
+    respuestas = {}  # {"PC1": "xxxx", ...}
+    index = 0
+
+    while True:
+        try:
+            pregunta = preguntas[index]
+            idPregunta = pregunta.get("id", f"PC{index+1}")
+            textoPregunta = pregunta.get("text", "Pregunta sin texto")
+            repuestaUser = respuestas.get(idPregunta)
+
+            util.Limpiar_consola()
+            print(f"📌 Pregunta {index+1}/{total}")
+            print(textoPregunta)
+
+            if repuestaUser:
+                print(f"\n✅ Respuesta guardada: {repuestaUser}")
+
+            print("\n👉 Preguntas Abiertas, una vez termines de responder la preguntas (Autoavanza a la siguiente)")
+            print("   'n' = siguiente | 'p' = anterior | 'f' = finalizar y calificar | 'q' = salir sin calificar")
+            opcion = input("Tu respuesta: ").strip().lower()
+
+            if opcion == "n":
+                if index < total - 1:
+                    index += 1
+                else:
+                    print("⚠️ Ya estás en la última pregunta.")
+                    util.Stop()
+
+            elif opcion == "p":
+                if index > 0:
+                    index -= 1
+                else:
+                    print("⚠️ Ya estás en la primera pregunta.")
+                    util.Stop()
+
+            elif opcion == "f":
+                # Finalizar y calificar
+                util.Limpiar_consola()
+                resultado = calificarPreguntas(preguntas, respuestas)
+                imprimirResultado(resultado)
+                return resultado
+
+            elif opcion == "q":
+                print("\n🚪 Saliendo sin calificar...")
+                return None
+
+            else:
+                respuestas[idPregunta] = opcion
+                # Auto-avanza si no es la última
+                if index < total - 1:
+                    index += 1
+                    # no pausamos para que el flujo sea fluido
+                    continue
+                else:
+                    # Última pregunta: informar y esperar acción del usuario
+                    print(f"✅ Respuesta '{opcion}' guardada para {idPregunta}.")
+                    print("📌 Ya estás en la última pregunta. Usa 'f' para finalizar o 'p' para revisar.")
+                    util.Stop()
 
         except KeyboardInterrupt:
             print("\n⛔ Interrupción detectada (Ctrl+C). Cerrando.")

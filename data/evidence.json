@@ -10,7 +10,7 @@
                 "d": "Personificación"
             },
             "correct": "c",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q2",
@@ -22,7 +22,7 @@
                 "d": "Expresar sentimientos"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q3",
@@ -34,7 +34,7 @@
                 "d": "Eliminar la subjetividad"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q4",
@@ -46,7 +46,7 @@
                 "d": "x³+1"
             },
             "correct": "a",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q5",
@@ -58,7 +58,7 @@
                 "d": "14"
             },
             "correct": "c",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q6",
@@ -70,7 +70,7 @@
                 "d": "1.25"
             },
             "correct": "ninguno",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q7",
@@ -82,7 +82,7 @@
                 "d": "Lípidos"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q8",
@@ -94,7 +94,7 @@
                 "d": "Marie Curie"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q9",
@@ -106,7 +106,7 @@
                 "d": "Gas natural"
             },
             "correct": "c",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q10",
@@ -118,7 +118,7 @@
                 "d": "1920 – 1930"
             },
             "correct": "a",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q11",
@@ -130,7 +130,7 @@
                 "d": "Mercantilismo"
             },
             "correct": "c",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q12",
@@ -142,7 +142,7 @@
                 "d": "Franceses"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q13",
@@ -154,7 +154,7 @@
                 "d": "goed"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q14",
@@ -166,7 +166,7 @@
                 "d": "buys"
             },
             "correct": "c",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q15",
@@ -178,7 +178,7 @@
                 "d": "by"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q16",
@@ -190,7 +190,7 @@
                 "d": "Júpiter"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q17",
@@ -202,7 +202,7 @@
                 "d": "Oceanía"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q18",
@@ -214,7 +214,7 @@
                 "d": "Pluviómetro"
             },
             "correct": "c",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q19",
@@ -226,7 +226,7 @@
                 "d": "Jorge Luis Borges"
             },
             "correct": "b",
-            "points": 1
+            "points": 5
         },
         {
             "id": "Q20",
@@ -238,38 +238,38 @@
                 "d": "Oz"
             },
             "correct": "a",
-            "points": 1
+            "points": 5
         }
     ],
     "PreguntasCortas": [
         {
             "id": "PC1",
             "text": "Explica con tus propias palabras qué es una metáfora y da un ejemplo.",
-            "max_points": 2,
+            "max_points": 20,
             "topic": "Lengua y Literatura"
         },
         {
             "id": "PC2",
             "text": "Resuelve la ecuación: 3x + 7 = 16. Escribe solo el valor de x.",
-            "max_points": 1,
+            "max_points": 20,
             "topic": "Matemáticas"
         },
         {
             "id": "PC3",
             "text": "Menciona dos características principales del Romanticismo literario.",
-            "max_points": 2,
+            "max_points": 20,
             "topic": "Literatura"
         },
         {
             "id": "PC4",
             "text": "Traduzca al inglés: 'Ella estudia todos los días en la biblioteca'.",
-            "max_points": 2,
+            "max_points": 20,
             "topic": "Inglés"
         },
         {
             "id": "PC5",
             "text": "¿Cuál es la capital de Egipto?",
-            "max_points": 1,
+            "max_points": 20,
             "topic": "Geografía"
         }
     ],
@@ -277,31 +277,31 @@
         {
             "id": "PE1",
             "text": "Redacta un ensayo corto sobre la importancia de la argumentación en los ensayos académicos. Incluye introducción, desarrollo y conclusión.",
-            "max_points": 5,
+            "max_points": 20,
             "topic": "Redacción Académica"
         },
         {
             "id": "PE2",
             "text": "Explica cómo la teoría de la gravitación de Newton cambió la visión del universo en su época. Usa ejemplos históricos.",
-            "max_points": 5,
+            "max_points": 20,
             "topic": "Ciencias / Historia"
         },
         {
             "id": "PE3",
             "text": "Describe los beneficios y retos del uso de energías renovables en el mundo actual. Argumenta tu posición.",
-            "max_points": 5,
+            "max_points": 20,
             "topic": "Ciencias Naturales"
         },
         {
             "id": "PE4",
             "text": "Escribe un ensayo sobre cómo la Primera Guerra Mundial transformó la política y sociedad en Europa.",
-            "max_points": 5,
+            "max_points": 20,
             "topic": "Historia"
         },
         {
             "id": "PE5",
             "text": "¿Cómo influye el aprendizaje del inglés en las oportunidades académicas y laborales en la actualidad? Desarrolla tu opinión.",
-            "max_points": 5,
+            "max_points": 20,
             "topic": "Inglés"
         }
     ]
