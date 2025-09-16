@@ -113,6 +113,4 @@ def addAdmin():
     return admin
 
 def reportes():
-    while True():
-        try:
-            print(" Estudiante")
+    pass
