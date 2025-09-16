@@ -16,26 +16,24 @@ corefiles.initialize_json(DB_Prueba, {
 })
 
 corefiles.initialize_json(DB_Qualifer, {
-    "Resultados": {          # respuestas/resultado del alumno
+    "Resultados": {
         "Cerradas": {},
         "Cortas":   {},
         "Ensayo":   {}
     },
-    "Qualifer_ensayos": {    # calificación del corrector
+    "Qualifer_ensayos": {
         "Cortas": {},
         "Ensayo": {}
     }
 })
 
-# ==============================
-#  MENÚ CALIFICACIÓN (sin OOP)
-# ==============================
 def menuQualifier():
     while True:
         print("\n===== MENÚ CALIFICACIÓN =====")
         print("1. Listar pendientes (Cortas)")
         print("2. Listar pendientes (Ensayo)")
         print("3. Calificar pendiente")
+        print("4. Ver notas de exámenes")
         print("0. Salir")
         opcion = input("👉 Opción: ").strip()
 
@@ -66,6 +64,11 @@ def menuQualifier():
                     continue
                 calificar_pendiente(tipo, idx)
                 utilidades.Limpiar_consola()
+            case '4':
+                utilidades.Limpiar_consola()
+                ver_notas_examenes()
+                utilidades.Stop()
+                utilidades.Limpiar_consola()
 
             case '0':
                 utilidades.Limpiar_consola()
@@ -77,9 +80,27 @@ def menuQualifier():
                 print("❌ Opción inválida.")
                 utilidades.Limpiar_consola()
 
-# ==============================
-#  LISTAR Y CALIFICAR PENDIENTES
-# ==============================
+def ver_notas_examenes():
+    """Muestra las notas de todos los exámenes ya calificados"""
+    data = corefiles.read_json(DB_Qualifer) or {}
+    data.setdefault("Resultados", {"Cerradas": {}, "Cortas": {}, "Ensayo": {}})
+
+    print("\n===== 📊 NOTAS DE EXÁMENES 📊 =====")
+
+    for tipo in ("Cortas", "Ensayo"):
+        resultados = data["Resultados"].get(tipo, {}) or {}
+        calificados = {k: v for k, v in resultados.items() if v.get("graded")}
+
+        if not calificados:
+            print(f"\n⚠️ No hay {tipo} calificados aún.")
+            continue
+
+        print(f"\n📌 {tipo} calificados:")
+        for ident, payload in calificados.items():
+            grade = payload.get("grade", "---")
+            fecha = payload.get("datetime", "---")
+            print(f" - [{ident}] Fecha: {fecha} | Nota: {grade}")
+
 def listar_pendientes(tipo: str):
     data = corefiles.read_json(DB_Qualifer) or {}
     data.setdefault("Resultados", {"Cerradas": {}, "Cortas": {}, "Ensayo": {}})
@@ -137,7 +158,6 @@ def calificar_pendiente(tipo: str, indice: int):
     answers = payload.get("answers") or {}
     total_q = payload.get("total_questions", len(answers))
 
-    # Lee banco de preguntas directamente de evidence.json
     data_prueba = corefiles.read_json(DB_Prueba) or {}
     if tipo == "Cortas":
         lista_preg = data_prueba.get("PreguntasCortas", [])
@@ -146,19 +166,18 @@ def calificar_pendiente(tipo: str, indice: int):
         lista_preg = data_prueba.get("PreguntasEnsayo", [])
         pref = "PE"
 
-    # Mapa id -> texto de pregunta (sin helpers ni POO)
     mapa_texto = {}
     for i, q in enumerate(lista_preg, start=1):
         qid = q.get("id", f"{pref}{i}")
         mapa_texto[qid] = q.get("text", f"(Sin texto para {qid})")
 
-    # Calificación por pregunta
+
     print(f"\n📝 Calificando [{tipo}] de [{ident}] — {len(answers)} respuesta(s)")
     calificaciones_pregunta = {}
     suma = 0.0
     cuenta = 0
 
-    # Recorre en orden por id de pregunta
+
     for qid in sorted(answers.keys()):
         texto = mapa_texto.get(qid, f"(No existe en banco) {qid}")
         resp  = answers[qid]
@@ -186,10 +205,10 @@ def calificar_pendiente(tipo: str, indice: int):
         suma += nota
         cuenta += 1
 
-    # Promedio final (si no hubo respuestas, 0)
+
     grade_total = round((suma / cuenta), 2) if cuenta else 0.0
 
-    # Guarda calificación del corrector bajo Qualifer_ensayos.<tipo>.<ident>
+
     now = datetime.now().isoformat(timespec="seconds")
     obj_calif = {
         "grade_total": grade_total,
@@ -200,7 +219,7 @@ def calificar_pendiente(tipo: str, indice: int):
     }
     corefiles.update_json(DB_Qualifer, {ident: obj_calif}, ["Qualifer_ensayos", tipo])
 
-    # Marca en Resultados como calificado y copia la nota total
+
     corefiles.update_json(DB_Qualifer, {"graded": True, "grade": grade_total}, ["Resultados", tipo, ident])
 
     print(f"\n✅ Calificado [{tipo}] -> {ident}")
