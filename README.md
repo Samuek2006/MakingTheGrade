@@ -36,6 +36,30 @@ El MVP incluye:
 
 ## 🎯 Metodología  
 El desarrollo se realizó con un enfoque **Scrum**, trabajando en sprints cortos y entregando un MVP funcional en 6 días, priorizando simplicidad y funcionalidad mínima viable.
+---
+# 📝 Sprint Backlog – Aplicación de pruebas
+
+| Historia | Tarea | Estado | Responsable |
+|----------|-------|--------|-------------|
+| A1 – Iniciar sesión estudiante | Validar usuario/clave contra centro de pruebas configurado | To Do | |
+| A1 – Iniciar sesión estudiante | Conceder acceso solo a usuarios válidos | To Do | |
+| A1 – Iniciar sesión estudiante | Mostrar mensaje de error claro (“usuario/clave inválidos”) | To Do | |
+| A2 – Presentar prueba selección múltiple | Cargar preguntas desde base central | To Do | |
+| A2 – Presentar prueba selección múltiple | Permitir solo una respuesta por estudiante | To Do | |
+| A2 – Presentar prueba selección múltiple | Calcular puntaje automático en tiempo real | To Do | |
+| A2 – Presentar prueba selección múltiple | Enviar y registrar examen con éxito | To Do | |
+| A3 – Preguntas cortas y ensayo | Habilitar campos de texto editables | To Do | |
+| A3 – Preguntas cortas y ensayo | Guardar respuestas de forma segura (persistencia al recargar) | To Do | |
+| A3 – Preguntas cortas y ensayo | Envío exitoso adjunta todo el contenido al examen | To Do | |
+| B1 – Calificación manual | Mostrar lista solo con respuestas pendientes | To Do | |
+| B1 – Calificación manual | Permitir asignar nota numérica | To Do | |
+| B1 – Calificación manual | Guardar nota en base sin pérdida de datos | To Do | |
+| B2 – Consolidación automática | Sumar puntaje automático + manual | To Do | |
+| B2 – Consolidación automática | Generar nota final única por estudiante | To Do | |
+| B2 – Consolidación automática | Almacenar consolidado en base centralizada sin duplicados | To Do | |
+| C1 – Reporte básico | Mostrar lista de estudiantes que presentaron examen | To Do | |
+| C1 – Reporte básico | Incluir nombre, colegio y puntaje final | To Do | |
+| C1 – Reporte básico | Permitir filtro por colegio | To Do | |
 
 ---
 ### 📖 Historias y Avance por Sprint  
