@@ -1,0 +1,45 @@
+{
+    "admins": {
+        "1001": {
+            "identificacion": "1001",
+            "Nombre": "Admin",
+            "Apellido": "Test",
+            "telefono": 3100000000,
+            "rol": "admin",
+            "Estado": "Inscrito",
+            "Credenciales": {
+                "username": "admin",
+                "password": "Admin1234"
+            }
+        }
+    },
+    "qualifiers": {
+        "2001": {
+            "identificacion": "2001",
+            "Nombre": "Qualifier",
+            "Apellido": "Test",
+            "telefono": 3200000000,
+            "rol": "qualifier",
+            "Estado": "Inscrito",
+            "Credenciales": {
+                "username": "qualifier",
+                "password": "Qualifier1234"
+            }
+        }
+    },
+    "students": {
+        "3001": {
+            "identificacion": "3001",
+            "Nombre": "Student",
+            "Apellido": "Test",
+            "Direccion": "Calle Falsa 123",
+            "telefono": 3000000000,
+            "rol": "student",
+            "Estado": "Inscrito",
+            "Credenciales": {
+                "username": "student",
+                "password": "Student1234"
+            }
+        }
+    }
+}

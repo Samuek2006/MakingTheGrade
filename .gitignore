@@ -1,0 +1,131 @@
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ==============================
+# Tests / Coverage
+# ==============================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# ==============================
+# Project specific
+# ==============================
+# Flet storage
+apps/ui/src/storage/
+
+# Local DB files
+db.sqlite3
+db.sqlite3-journal
+
+# Generated / seeds / migrations
+apps/db/seeds/
+apps/db/supabase/
+
+# Local assets
+img/
+packages/
+
+# ==============================
+# Logs / Debug
+# ==============================
+*.log
+*.pot
+*.mo
+
+# ==============================
+# IDEs / Editors
+# ==============================
+# PyCharm / IntelliJ
+.idea/
+
+# VS Code
+.vscode/
+
+# Spyder / Rope
+.spyderproject
+.spyproject
+.ropeproject
+
+# Jupyter / IPython
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# ==============================
+# Tools
+# ==============================
+# PyInstaller
+*.manifest
+*.spec
+
+# Sphinx docs
+docs/_build/
+
+# Mkdocs
+/site
+
+# MyPy / Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+
+# ==============================
+# Lockfiles (opcional)
+# ==============================
+*.lock
+pdm.lock
+.pdm.toml
