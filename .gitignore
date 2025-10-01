@@ -72,10 +72,6 @@ db.sqlite3-journal
 apps/db/seeds/
 apps/db/supabase/
 
-# Local assets
-img/
-packages/
-
 # ==============================
 # Logs / Debug
 # ==============================
