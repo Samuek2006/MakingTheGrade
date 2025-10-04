@@ -1,65 +1,114 @@
 # 📘 Alcanzando la Nota 🎓  
 **Nombre original:** *Making The Grade*  
 
-Este proyecto es un **MVP desarrollado en Python con Flet**. Su objetivo es diseñar un sistema que permita al **Ministerio de Educación** estandarizar las pruebas de todos los colegios del país, asegurando consolidación, trazabilidad y facilidad de calificación.  
+Un **MVP educativo desarrollado en Python + Flet** que busca convertirse en la base para un sistema de estandarización de pruebas escolares a nivel nacional.  
 
-Actualmente está en transición desde una versión en consola hacia una **interfaz gráfica**, y en el futuro se conectará con una **base de datos** para manejo real de usuarios, resultados y reportes.  
+El objetivo es ofrecer al **Ministerio de Educación** una plataforma que garantice:  
+✅ Estandarización de pruebas  
+✅ Consolidación y trazabilidad de resultados  
+✅ Facilidad de calificación y análisis  
+
+Actualmente está en **fase de transición** desde una versión de consola hacia una **interfaz gráfica modular**, con miras a conectarse a una **base de datos** para gestión real de usuarios y reportes.  
 
 ---
 
 ## 🖼️ Capturas de Pantalla  
 
 ### 🔑 Login  
-Permite a los usuarios iniciar sesión con credenciales.  
+Pantalla inicial para autenticación de usuario.  
 ![Login](/img/login.png)  
 
 ### 🏠 Dashboard – Pruebas disponibles  
-Lista las pruebas activas con navegación adaptada.  
+Vista general con tarjetas dinámicas de pruebas activas.  
 ![Dashboard](/img/home.png)  
 
 ### 📝 Presentación de Prueba  
-Renderiza preguntas de selección múltiple con temporizador y navegación.  
+Preguntas de selección múltiple con temporizador, validación y navegación controlada.  
 ![Prueba](/img/prueba.png)  
 
 ---
 
-## 📌 Características actuales  
-- **Login gráfico** con campos de usuario y contraseña.  
-- **Dashboard de pruebas** con tarjetas dinámicas (ejemplo: Lógica, Numérica, Verbal).  
-- **Presentación de pruebas** con temporizador y opciones de respuesta seleccionables.  
-- **Navegación modularizada**: login → dashboard → prueba.  
-- **UI responsive**: diseño centrado, compatible con escritorio y dispositivos móviles.  
+## 🚀 Funcionalidades actuales  
+
+- **Login gráfico** con usuario y contraseña (mock).  
+- **Dashboard de pruebas** con navegación modularizada.  
+- **Presentación de pruebas** con:  
+  - Temporizador automático ⏱️  
+  - Opciones seleccionables con feedback inmediato  
+  - Flujo Validar → Siguiente  
+- **UI responsive** adaptable a escritorio y dispositivos móviles.  
 
 ---
 
-## 📌 Próximos pasos  
-- Conexión con **base de datos** (SQLite o PostgreSQL).  
+## 🛠️ Roadmap / Próximos pasos  
+
+- Conexión con **base de datos** (SQLite / PostgreSQL).  
 - Gestión de **roles de usuario** (estudiante, calificador, administrador).  
-- Registro y consolidación de resultados.  
-- Generación de reportes de notas y estadísticas.  
+- Registro y consolidación de resultados por estudiante.  
+- Generación de reportes automáticos con estadísticas.  
+- Exportación de resultados en PDF/Excel.  
 
 ---
 
-## 📂 Tecnologías utilizadas  
+## 🧩 Tecnologías utilizadas  
+
 - **Python 3.11+**  
-- **Flet** (para la interfaz gráfica)  
-- (Próximamente) **SQLite/PostgreSQL** para persistencia  
+- **Flet** – framework para la UI (Flutter desde Python)  
+- (Próximamente) **SQLite/PostgreSQL** para persistencia de datos  
 
 ---
 
 ## 📂 Estructura del Proyecto  
 
 ```
-MAKINGTHEGRADE
-├── views/
-│ ├── login.py # Pantalla de login
-│ ├── dashBoard.py # Dashboard principal
-│ ├── prueba_panel.py # Presentación de prueba
-│ └── navBar.py # Barra de navegación
-├── main.py # Entry point
-├── README.md # Documentación
-└── docs/
-└── screens/ # Capturas de pantalla
+MakingTheGrade V2/
+├── apps/ # Aplicaciones principales
+│ ├── console/ # Versión en consola
+│ │ ├── data/ # Archivos JSON de prueba (usuarios, notas, evidencias)
+│ │ ├── modules/ # Módulos de la app consola
+│ │ │ ├── admin/ # Vistas para administrador
+│ │ │ ├── qualifiers/ # Vistas para calificadores
+│ │ │ ├── students/ # Vistas para estudiantes
+│ │ │ └── login.py # Lógica de login en consola
+│ │ ├── util/ # Utilidades y sesión
+│ │ └── main.py # Punto de entrada de la app consola
+│ │
+│ ├── db/ # Módulo de base de datos
+│ │ ├── models/ # Modelos de datos
+│ │ ├── seeds/ # Datos semilla en JSON
+│ │ ├── supabase/ # Integración con Supabase y esquema SQL
+│ │ ├── db.py # Conexión principal DB
+│ │ └── db.sql # Script SQL inicial
+│ │
+│ └── ui/ # Interfaz gráfica con Flet
+│ └── src/
+│ ├── assets/ # Recursos gráficos (iconos, splash)
+│ ├── components/ # Componentes reutilizables (CRUD)
+│ ├── repositories/ # Repositorios de datos (auth, preguntas, resultados)
+│ ├── services/ # Servicios externos (ej. cliente Supabase)
+│ ├── state/ # Estado global (en construcción)
+│ ├── storage/ # Almacenamiento temporal y persistente
+│ │ ├── data/
+│ │ └── temp/
+│ ├── utils/ # Utilidades varias
+│ ├── views/ # Vistas de la UI
+│ │ ├── dashboard.py
+│ │ ├── login.py
+│ │ ├── nav_bar.py
+│ │ ├── pruebas.py
+│ │ └── prueba_panel.py
+│ └── main.py # Punto de entrada de la app gráfica
+│
+├── img/ # Capturas de pantalla (README/docs)
+│ ├── home.png
+│ ├── login.png
+│ └── prueba.png
+│
+├── packages/ # Dependencias externas / empaquetado futuro
+├── .env # Variables de entorno
+├── .gitignore # Exclusiones de git
+├── pyproject.toml # Configuración del proyecto y dependencias
+└── README.md # Documentación principal
 ```
 
 ---
@@ -82,5 +131,5 @@ python main.py
 
 Por ahora no hay base de datos real; el sistema permite el acceso con cuentas ficticias para pruebas de la UI:
 
-Usuario: ```demo```  
-Contraseña: ```demo123```
+Usuario: ```Andres1234```  
+Contraseña: ```123456```
