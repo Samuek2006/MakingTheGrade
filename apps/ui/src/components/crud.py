@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 from types import SimpleNamespace
 import json
 
-from sqlalchemy import select, func, update, delete
+from sqlalchemy import select, func, update, delete, text
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from passlib.hash import bcrypt
@@ -359,10 +359,10 @@ def update_pregunta_fields(pregunta_id: int, **fields) -> Dict[str, Any]:
     allowed_map = {
         "enunciado": "enunciado",
         "secuencia": "secuencia",
-        "correcta": "correcta",              # o respuesta_correcta
+        "correcta": "correcta",  # o respuesta_correcta
         "respuesta_correcta": "respuesta_correcta",
         "orden": "orden",
-        "opciones": "opciones",              # o opciones_json
+        "opciones": "opciones",  # o opciones_json
     }
     upd = {}
     for k, v in fields.items():
@@ -411,3 +411,118 @@ def delete_pregunta(pregunta_id: int) -> None:
             db.commit()
     except SQLAlchemyError as ex:
         raise ValueError(f"Error eliminando pregunta: {ex}") from ex
+
+
+# ---------------------------- INTENTOS / RESPUESTAS DE PRUEBA ----------------------------
+
+def guardar_respuestas_prueba(
+        prueba_id: int,
+        total_preguntas: int,
+        correctas: int,
+        respuestas: List[Dict[str, Any]],
+        motivo: str = "finalizado",
+        user_id: Optional[int] = None,
+) -> int:
+    """
+    Crea un intento en 'prueba_intentos' y sus 'prueba_respuestas'.
+
+    respuestas: [{"pregunta_idx": int, "seleccion": str, "correcta": bool}, ...]
+    Retorna: id del intento creado.
+    """
+    if not total_preguntas or total_preguntas <= 0:
+        raise ValueError("total_preguntas debe ser > 0")
+
+    score_pct = (100.0 * correctas / total_preguntas) if total_preguntas else 0.0
+
+    sql_insert_intento = text("""
+                                INSERT INTO prueba_intentos
+                                (prueba_id, user_id, motivo, total_preguntas, correctas, score_pct, finished_at)
+                                VALUES (:prueba_id, :user_id, :motivo, :total_preguntas, :correctas, :score_pct, NOW())
+                                """)
+
+    sql_last_id = text("SELECT LAST_INSERT_ID() AS id")
+
+    sql_insert_respuesta = text("""
+                                INSERT INTO prueba_respuestas
+                                    (intento_id, pregunta_idx, seleccion, correcta)
+                                VALUES (:intento_id, :pregunta_idx, :seleccion, :correcta)
+                                """)
+
+    try:
+        with get_session() as db:
+            # 1) Intento
+            db.execute(
+                sql_insert_intento,
+                {
+                    "prueba_id": int(prueba_id),
+                    "user_id": user_id,  # si aún no manejas sesión, pasará None
+                    "motivo": motivo,
+                    "total_preguntas": int(total_preguntas),
+                    "correctas": int(correctas),
+                    "score_pct": float(score_pct),
+                },
+            )
+            intento_id = db.execute(sql_last_id).mappings().first()["id"]
+
+            # 2) Respuestas (bulk)
+            if respuestas:
+                payload = [
+                    {
+                        "intento_id": int(intento_id),
+                        "pregunta_idx": int(r.get("pregunta_idx", 0)),
+                        "seleccion": str(r.get("seleccion", "")),
+                        "correcta": 1 if bool(r.get("correcta", False)) else 0,
+                    }
+                    for r in respuestas
+                ]
+                db.execute(sql_insert_respuesta, payload)  # executemany con lista de dicts
+
+            # commit lo hace get_session()
+            return int(intento_id)
+
+    except SQLAlchemyError as ex:
+        raise ValueError(f"Error guardando intento/respuestas: {ex}") from ex
+
+
+def get_resumen_intento(intento_id: int) -> Dict[str, Any]:
+    """
+    Devuelve el intento y sus respuestas (útil para reportes rápidos).
+    """
+    try:
+        with get_session() as db:
+            intento = db.execute(
+                text("""
+                        SELECT id,
+                                prueba_id,
+                                user_id,
+                                motivo,
+                                total_preguntas,
+                                correctas,
+                                score_pct,
+                                finished_at
+                        FROM prueba_intentos
+                        WHERE id = :id
+                        """),
+                {"id": int(intento_id)},
+            ).mappings().first()
+
+            if not intento:
+                raise ValueError("Intento no encontrado.")
+
+            respuestas = db.execute(
+                text("""
+                        SELECT id, intento_id, pregunta_idx, seleccion, correcta
+                        FROM prueba_respuestas
+                        WHERE intento_id = :id
+                        ORDER BY pregunta_idx ASC
+                        """),
+                {"id": int(intento_id)},
+            ).mappings().all()
+
+            return {
+                "intento": dict(intento),
+                "respuestas": [dict(r) for r in respuestas],
+            }
+
+    except SQLAlchemyError as ex:
+        raise ValueError(f"Error consultando intento/respuestas: {ex}") from ex

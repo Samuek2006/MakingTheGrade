@@ -341,3 +341,102 @@ CREATE TABLE IF NOT EXISTS attempt_items
 ALTER TABLE attempt_items
     ADD COLUMN IF NOT EXISTS user_answer_image_url TEXT NULL,
     ADD COLUMN IF NOT EXISTS user_answer_json JSON NULL;
+
+-- Intentos de una prueba mostrada en el panel
+CREATE TABLE IF NOT EXISTS prueba_intentos
+(
+    id
+    BIGINT
+    UNSIGNED
+    AUTO_INCREMENT
+    PRIMARY
+    KEY,
+    prueba_id
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    user_id
+    BIGINT
+    UNSIGNED
+    NULL,
+    motivo
+    VARCHAR
+(
+    100
+) NULL, -- "finalizado por el usuario" | "tiempo agotado" | etc.
+    total_preguntas INT NOT NULL,
+    correctas INT NOT NULL,
+    score_pct DECIMAL
+(
+    5,
+    2
+) NOT NULL DEFAULT 0,
+    finished_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_prueba_intentos_prueba
+(
+    prueba_id
+),
+    INDEX idx_prueba_intentos_user
+(
+    user_id
+),
+    CONSTRAINT fk_prueba_intentos_prueba
+    FOREIGN KEY
+(
+    prueba_id
+) REFERENCES pruebas
+(
+    id
+) ON DELETE CASCADE,
+    CONSTRAINT fk_prueba_intentos_user
+    FOREIGN KEY
+(
+    user_id
+) REFERENCES users
+(
+    id
+)
+  ON DELETE SET NULL
+    ) ENGINE=InnoDB;
+
+-- Respuestas individuales por intento
+CREATE TABLE IF NOT EXISTS prueba_respuestas
+(
+    id
+    BIGINT
+    UNSIGNED
+    AUTO_INCREMENT
+    PRIMARY
+    KEY,
+    intento_id
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    pregunta_idx
+    INT
+    NOT
+    NULL, -- índice 0..N que viste en la UI
+    seleccion
+    TEXT
+    NOT
+    NULL, -- texto de la opción elegida (o clave)
+    correcta
+    TINYINT
+(
+    1
+) NOT NULL, -- 1/0
+    INDEX idx_prueba_respuestas_intento
+(
+    intento_id
+),
+    CONSTRAINT fk_prueba_respuestas_intento
+    FOREIGN KEY
+(
+    intento_id
+) REFERENCES prueba_intentos
+(
+    id
+) ON DELETE CASCADE
+    ) ENGINE=InnoDB;
