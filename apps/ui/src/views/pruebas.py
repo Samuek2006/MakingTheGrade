@@ -1,6 +1,6 @@
 import flet as ft
-from apps.ui.src.views.nav_bar import build_navigation_bar
-from apps.ui.src.views.prueba_panel import build_prueba_panel
+from .nav_bar import build_navigation_bar
+from .prueba_panel import build_prueba_panel
 
 class PruebasApp:
     def __init__(self, page: ft.Page):

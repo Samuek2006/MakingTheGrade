@@ -1,8 +1,7 @@
 import flet as ft
-from apps.ui.src.views.dashboard import Dashboard
-from apps.ui.src.components.crud import create_user, authenticate_user
+from .dashboard import Dashboard
+from ..components.crud import create_user, authenticate_user
 from uuid import uuid4
-from passlib.hash import bcrypt
 import json
 
 # --- Botón reutilizable ---
@@ -20,8 +19,20 @@ class RegisterAPP:
     def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "Registro"
+
+        # ========== CONFIGURACIÓN DE PÁGINA ==========
+        self.page.padding = ft.padding.only(
+            top=40,
+            bottom=20,
+            left=16,
+            right=16
+        )
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
+
+        # Configuración responsive
+        self.page.scroll = ft.ScrollMode.AUTO
+        # ======================================================
         self._busy = False
 
         self.name_tf = ft.TextField(
@@ -84,11 +95,26 @@ class RegisterAPP:
             horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
         )
 
+        # ========== CARD CON ANCHO ADAPTATIVO ==========
         card = ft.Card(
-            content=ft.Container(width=420, padding=24, content=form),
+            content=ft.Container(
+                width=420,
+                padding=24,
+                content=form
+            ),
             elevation=6,
         )
-        self.page.add(ft.Container(expand=True, alignment=ft.alignment.center, content=card))
+        # ===============================================
+
+        # ========== CONTENEDOR CON SafeArea IMPLÍCITO ==========
+        self.page.add(
+            ft.Container(
+                expand=True,
+                alignment=ft.alignment.center,
+                content=card,
+            )
+        )
+        # =======================================================
 
     def validar(self) -> bool:
         ok = True
@@ -142,7 +168,6 @@ class RegisterAPP:
 
         try:
             identificacion = str(uuid4())
-            password_hash = bcrypt.hash(self.password_tf.value)
 
             create_user(
                 identificacion=identificacion,
@@ -150,7 +175,7 @@ class RegisterAPP:
                 apellido=(self.apellido_tf.value or "").strip(),
                 telefono=(self.tel_tf.value or "").strip(),
                 username=(self.user_tf.value or "").strip(),
-                password_hash=password_hash,
+                password_plain=self.password_tf.value,
             )
 
             self.page.snack_bar = ft.SnackBar(ft.Text("✅ Registro exitoso. Inicia sesión para continuar."))
@@ -181,8 +206,21 @@ class LoginAPP:
     def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "Login"
+
+        # ========== CONFIGURACIÓN DE PÁGINA MEJORADA ==========
+        self.page.padding = ft.padding.only(
+            top=40,
+            bottom=20,
+            left=16,
+            right=16
+        )
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
+
+        # Configuración responsive
+        self.page.scroll = ft.ScrollMode.AUTO  # Permite scroll si el contenido es muy grande
+        # ======================================================
+
         self._busy = False
 
         remembered_username = self.page.client_storage.get("remember_username") or ""
@@ -229,19 +267,27 @@ class LoginAPP:
             [self.login_btn, register_btn],
             spacing=10, horizontal_alignment=ft.CrossAxisAlignment.STRETCH)
 
+        # ========== CARD CON ANCHO ADAPTATIVO ==========
         card_content = ft.Container(
-            width=420, padding=ft.padding.all(24),
+            width=420,
+            padding=ft.padding.all(24),
             content=ft.Column(
                 controls=[header, ft.Divider(), self.user, self.password, meta_row, ft.Divider(), buttons_col],
                 spacing=14, horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
             ),
         )
         card = ft.Card(content=card_content, elevation=6)
+        # ===============================================
+
+        # ========== CONTENEDOR CON SafeArea IMPLÍCITO ==========
         self.page.add(
             ft.Container(
-                expand=True, alignment=ft.alignment.center,
-                padding=ft.padding.symmetric(horizontal=16),
-                content=card))
+                expand=True,
+                alignment=ft.alignment.center,
+                content=card,
+            )
+        )
+        # =======================================================
 
     def show_info(self, msg: str):
         self.page.snack_bar = ft.SnackBar(ft.Text(msg))
@@ -303,9 +349,8 @@ class LoginAPP:
 
             print("[LOGIN] Cargando Dashboard…")
             try:
-                # import local evita circulares
                 from .dashboard import Dashboard
-                Dashboard(self.page)           # ← tu clase pinta directo en page
+                Dashboard(self.page)
                 self.page.update()
                 print("[LOGIN] Dashboard cargado.")
             except Exception as dash_ex:

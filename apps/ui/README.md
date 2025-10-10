@@ -127,9 +127,71 @@ pip install flet
 python main.py
 ```
 
+---
+
+## ⚙️ Variables de Entorno
+
+- Archivo `.env` (opcional). Un ejemplo está en `.env.example`.
+- La app funciona por defecto con **SQLite** en el directorio HOME/sandbox de la app (Android incluido).
+- Variables relevantes:
+  - `APP_ENV`: dev|prod (solo informativa por ahora)
+  - `SQLITE_DB_PATH`: ruta absoluta para la base local (opcional)
+  - `DB_NAME`: nombre lógico usado para el archivo `.db` si no defines `SQLITE_DB_PATH`.
+  - Variables legacy `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS` no son requeridas en la versión actual (SQLite).
+
+Valida tu configuración con:
+
+```
+python scripts/check_env.py
+```
+
 ## 🔑 Cuentas de prueba (mock)
 
 Por ahora no hay base de datos real; el sistema permite el acceso con cuentas ficticias para pruebas de la UI:
 
 Usuario: ```Andres1234```  
 Contraseña: ```123456```
+
+
+## 📦 Empaquetado
+
+- Windows (.exe): PyInstaller vía `flet pack` (opcional).
+- Android (APK/AAB): Flet + Flutter.
+
+### Prerrequisitos Android
+
+- Flutter SDK instalado y en `PATH` (`flutter --version`).
+- Android Studio + SDK + Herramientas de línea de comando.
+- Java JDK 17 recomendado (`java -version`).
+- Acepta licencias de Android SDK: `flutter doctor --android-licenses`.
+
+### Build Android
+
+1) Limpia caché del wrapper si es necesario:
+
+```
+flet build apk --clear-cache
+```
+
+2) Alternativas:
+
+- APK debug/rápido: `flet build apk`
+- APK release (firmado si configuras keystore): `flet build apk --release`
+
+El paquete se generará en `.flet/build/<plataforma>/outputs/apk/`.
+
+### Seed de datos (opcional)
+
+Para tener un usuario y pruebas de ejemplo:
+
+```
+python scripts/seed_basic.py
+```
+
+Usuario de prueba: `Andres1234`  
+Contraseña: `123456`
+
+### Requerimientos (opcional)
+
+Si necesitas un `requirements.txt` en UTF‑8, usa `requirements-utf8.txt` incluido. 
+El proyecto ya define dependencias en `pyproject.toml` (recomendado).

@@ -7,20 +7,20 @@ class Dashboard:
 
         # Imports locales para evitar circulares
         try:
-            from apps.ui.src.views.nav_bar import build_navigation_bar
+            from .nav_bar import build_navigation_bar
         except Exception as ex:
             print("[DASH] Error importando nav_bar:", ex)
             page.add(ft.Text(f"Error importando nav_bar: {ex}", color=ft.Colors.RED)); page.update(); return
 
         try:
-            from apps.ui.src.views.prueba_panel import build_prueba_panel
+            from .prueba_panel import build_prueba_panel
         except Exception as ex:
             print("[DASH] Error importando prueba_panel:", ex)
             page.add(ft.Text(f"Error importando prueba_panel: {ex}", color=ft.Colors.RED)); page.update(); return
 
         # CRUD de pruebas
         try:
-            from apps.ui.src.components.crud import get_pruebas_activas
+            from ..components.crud import get_pruebas_activas
         except Exception as ex:
             print("[DASH] Error importando crud_pruebas:", ex)
             page.add(ft.Text(f"Error importando crud_pruebas: {ex}", color=ft.Colors.RED)); page.update(); return
@@ -45,7 +45,7 @@ class Dashboard:
                         ft.Icon(name=ft.Icons.QUIZ, color=ft.Colors.BLUE, size=32),
                         ft.Column(
                             [ft.Text(titulo, weight=ft.FontWeight.BOLD, size=16),
-                             ft.Text(subtitulo or "", size=12, color=ft.Colors.GREY)],
+                                ft.Text(subtitulo or "", size=12, color=ft.Colors.GREY)],
                             alignment=ft.MainAxisAlignment.CENTER, spacing=2, expand=True,
                         ),
                         ft.Icon(name=ft.Icons.CHEVRON_RIGHT, color=ft.Colors.GREY, size=20),

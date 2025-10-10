@@ -1,0 +1,63 @@
+[project]
+name = "Making the Grade"
+version = "0.1.5"
+description = ""
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "SamDev Developer", email = "samuelcalderonsoto@gmail.com" }
+]
+dependencies = [
+  "flet==0.28.3",
+  "python-dotenv==1.0.1",
+  "httpx==0.28.1",  # si no lo usas, puedes quitarlo
+  "requests==2.32.5",  # idem; deja uno solo (httpx o requests)
+  "certifi==2024.8.30",
+  "passlib==1.7.4",
+]
+
+[tool.flet]
+org = "com.mycompany"
+product = "makingthegrade"
+company = "SamDev"
+copyright = "Copyright (C) 2025 by SamDev"
+module_name = "main"
+
+[tool.flet.app]
+path = "."
+
+[tool.uv]
+dev-dependencies = [
+  "flet[all]==0.28.3",
+]
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+flet = { extras = ["all"], version = "0.28.3" }
+
+# === AÑADIDOS PARA CONTROLAR EL PUBSPEC DEL WRAPPER FLUTTER ===
+[tool.flet.flutter.pubspec.environment]
+sdk = ">=3.7.0-0 <4.0.0"
+
+[tool.flet.flutter.pubspec.dependencies]
+webview_flutter = "4.10.0"
+webview_flutter_android = "4.10.1"
+
+[tool.flet.flutter.pubspec.dependency_overrides]
+webview_flutter_android = "4.10.1"
+
+# === PERMISOS Y CARACTERÍSTICAS ANDROID ===
+[tool.flet.android.permission]
+"android.permission.CAMERA" = true
+"android.permission.INTERNET" = true
+"android.permission.ACCESS_NETWORK_STATE" = true
+"android.permission.READ_EXTERNAL_STORAGE" = true
+"android.permission.WRITE_EXTERNAL_STORAGE" = true
+"android.permission.RECORD_AUDIO" = false  # cambia a true si lo usarás
+
+[tool.flet.android.feature]
+"android.hardware.camera" = true
+"android.hardware.camera.autofocus" = true
+"android.hardware.microphone" = false  # true si grabas audio
