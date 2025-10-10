@@ -1,4 +1,4 @@
-# 📘 Alcanzando la Nota 🎓  
+# 📘 Alcanzando la Nota Pruebas🎓  
 **Nombre original:** *Making The Grade*  
 
 Un **MVP educativo desarrollado en Python + Flet** que busca convertirse en la base para un sistema de estandarización de pruebas escolares a nivel nacional.  
