@@ -1,94 +1,104 @@
+# src/views/dashboard.py
+from __future__ import annotations
 import flet as ft
+from typing import List, Dict, Any, Optional
 
-class Dashboard:
-    def __init__(self, page: ft.Page):
-        page.adaptive = True
-        page.title = "Home"
 
-        # Imports locales para evitar circulares
-        try:
-            from .nav_bar import build_navigation_bar
-        except Exception as ex:
-            print("[DASH] Error importando nav_bar:", ex)
-            page.add(ft.Text(f"Error importando nav_bar: {ex}", color=ft.Colors.RED)); page.update(); return
+class DashboardUI(ft.Column):
+    def __init__(self, page: ft.Page, user: Optional[dict] = None, logic: Optional[object] = None):
+        super().__init__(spacing=16, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        self.page = page
+        self.user = user or {}
+        self.logic = logic
 
-        try:
-            from .prueba_panel import build_prueba_panel
-        except Exception as ex:
-            print("[DASH] Error importando prueba_panel:", ex)
-            page.add(ft.Text(f"Error importando prueba_panel: {ex}", color=ft.Colors.RED)); page.update(); return
+        self.page.adaptive = True
+        self.page.title = "Home"
 
-        # CRUD de pruebas
-        try:
-            from ..components.crud import get_pruebas_activas
-        except Exception as ex:
-            print("[DASH] Error importando crud_pruebas:", ex)
-            page.add(ft.Text(f"Error importando crud_pruebas: {ex}", color=ft.Colors.RED)); page.update(); return
-
-        def handle_nav_change(e: ft.ControlEvent):
-            idx = e.control.selected_index
-            print("[DASH] Tab seleccionado:", idx)
-
-        # Navigation bar
-        try:
-            page.navigation_bar = build_navigation_bar(page=page, selected_index=0, on_change=handle_nav_change)
-        except Exception as ex:
-            print("[DASH] Error construyendo navigation_bar:", ex)
-            page.add(ft.Text(f"Error construyendo navigation_bar: {ex}", color=ft.Colors.RED)); page.update(); return
-
+        # ======== Contenido principal ========
         header = ft.Text("Pruebas disponibles", size=22, weight=ft.FontWeight.BOLD)
 
-        def card(titulo, subtitulo, bg, on_click):
+        # factory de tarjeta
+        def card(titulo: str, subtitulo: str | None, bg, on_click):
             return ft.Container(
                 content=ft.Row(
                     controls=[
                         ft.Icon(name=ft.Icons.QUIZ, color=ft.Colors.BLUE, size=32),
                         ft.Column(
-                            [ft.Text(titulo, weight=ft.FontWeight.BOLD, size=16),
-                                ft.Text(subtitulo or "", size=12, color=ft.Colors.GREY)],
-                            alignment=ft.MainAxisAlignment.CENTER, spacing=2, expand=True,
+                            [
+                                ft.Text(titulo, weight=ft.FontWeight.BOLD, size=16),
+                                ft.Text(subtitulo or "", size=12, color=ft.Colors.GREY),
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            spacing=2,
+                            expand=True,
                         ),
                         ft.Icon(name=ft.Icons.CHEVRON_RIGHT, color=ft.Colors.GREY, size=20),
                     ],
-                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN, spacing=15,
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    spacing=15,
                 ),
-                bgcolor=bg, border_radius=10, padding=15, ink=True,
-                on_click=on_click, width=500,
+                bgcolor=bg,
+                border_radius=10,
+                padding=15,
+                ink=True,
+                on_click=on_click,
+                width=500,
             )
 
-        # Cargar pruebas desde BD
-        pruebas = get_pruebas_activas(limit=100)
-        print(f"[DASH] Pruebas encontradas: {len(pruebas)}")
+        # Construye la lista de tarjetas desde la data
+        def build_cards(pruebas: List[Dict[str, Any]] | None):
+            items: List[ft.Control] = []
+            if not pruebas:
+                # Estado vacío
+                items.append(
+                    ft.Container(
+                        padding=20,
+                        border_radius=12,
+                        bgcolor=ft.Colors.GREY_100,
+                        content=ft.Column(
+                            [
+                                ft.Text(
+                                    "Aún no hay pruebas disponibles",
+                                    weight=ft.FontWeight.BOLD,
+                                    size=14,
+                                )
+                            ],
+                            spacing=6,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        ),
+                    )
+                )
+                return items
 
-        items = [header]
+            for p in pruebas:
+                items.append(
+                    card(
+                        titulo=p.get("titulo", "Prueba"),
+                        subtitulo=p.get("descripcion", ""),
+                        bg=ft.Colors.WHITE,
+                        on_click=lambda e, pid=p.get("id"): print(f"[DASH] Abrir prueba {pid}"),
+                    )
+                )
+            return items
 
-        if not pruebas:
-            items.append(ft.Text("No hay pruebas disponibles.", color=ft.Colors.GREY))
-        else:
-            # Genera una card por prueba
-            for i, p in enumerate(pruebas):
-                # Alterna color de fondo para darle ritmo
-                bg = ft.Colors.WHITE if i % 2 == 0 else ft.Colors.GREY_200
+        # Intentar traer pruebas si hay lógica; si no, mostrar vacío
+        pruebas = None
+        if self.logic and hasattr(self.logic, "cargaPruebas"):
+            try:
+                pruebas = self.logic.cargaPruebas()
+            except Exception:
+                pruebas = None
 
-                def go_to_prueba(e, prueba_id=p["id"]):
-                    try:
-                        page.clean()
-                        # Si tu panel necesita el ID de la prueba:
-                        # build_prueba_panel(page, prueba_id=prueba_id)
-                        page.add(build_prueba_panel(page, prueba_id=prueba_id))
-                        page.update()
-                    except Exception as ex:
-                        print("[DASH] Error abriendo Prueba:", prueba_id, ex)
-                        page.snack_bar = ft.SnackBar(ft.Text(f"Error abriendo la prueba {prueba_id}: {ex}"))
-                        page.snack_bar.open = True
-                        page.update()
+        body = ft.Column(
+            controls=[header, *build_cards(pruebas)],
+            spacing=12,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            scroll=ft.ScrollMode.AUTO,
+            expand=True,
+        )
 
-                items.append(card(
-                    titulo=p["titulo"],
-                    subtitulo=p.get("subtitulo", ""),
-                    bg=bg,
-                    on_click=go_to_prueba
-                ))
+        self.controls = [
+            ft.Container(expand=True, alignment=ft.alignment.top_center, content=body)
+        ]
 
-        page.add(*items)
-        page.update()
+        self.page.update()

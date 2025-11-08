@@ -1,6 +1,6 @@
 [project]
 name = "Making the Grade"
-version = "0.1.5"
+version = "0.1.0"
 description = ""
 readme = "README.md"
 requires-python = ">=3.9"
@@ -13,7 +13,6 @@ dependencies = [
   "httpx==0.28.1",  # si no lo usas, puedes quitarlo
   "requests==2.32.5",  # idem; deja uno solo (httpx o requests)
   "certifi==2024.8.30",
-  "passlib==1.7.4",
 ]
 
 [tool.flet]

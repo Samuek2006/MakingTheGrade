@@ -5,7 +5,6 @@ import asyncio
 import json
 from ast import literal_eval
 
-
 def build_prueba_panel(page: ft.Page, prueba_id: int) -> ft.Container:
     from ..components.crud import get_prueba_con_preguntas
 

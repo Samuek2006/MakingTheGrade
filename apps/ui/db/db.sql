@@ -12,17 +12,18 @@ USE marking_grade;
 -- ─────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    identificacion VARCHAR(50) NOT NULL UNIQUE,
+    identificacion VARCHAR(50) UNIQUE,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     telefono VARCHAR(30),
-    rol ENUM('admin','qualifier','student') NOT NULL,
-    estado VARCHAR(50),
-    username VARCHAR(100) UNIQUE,
-    password_hash VARCHAR(255),
-    direccion VARCHAR(255) NULL,
+    rol ENUM('admin','qualifier','student','user') DEFAULT 'user',
+    estado ENUM('activo','inactivo','pendiente') DEFAULT 'activo',
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    direccion VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- ─────────────────────────────────────────────────────────────
 -- 3️⃣ TABLA DE PRUEBAS (Dashboard y Panel)

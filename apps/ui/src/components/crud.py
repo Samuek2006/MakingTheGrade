@@ -7,7 +7,6 @@ from types import SimpleNamespace
 import json
 
 from db.db import get_session
-from passlib.hash import pbkdf2_sha256
 
 
 # ---------------------------- Helpers ----------------------------
@@ -80,13 +79,12 @@ def create_user(identificacion: str, nombre: str, apellido: str,
             if cur.fetchone():
                 raise ValueError("El usuario ya existe o viola una restricción única.")
 
-            password_hash = pbkdf2_sha256.hash(password_plain)
             db.execute(
                 """
                 INSERT INTO users
                     (identificacion, nombre, apellido, telefono, rol, estado, username, password_hash, created_at)
                 VALUES
-                    (:identificacion, :nombre, :apellido, :telefono, :rol, :estado, :username, :password_hash, datetime('now'))
+                    (:identificacion, :nombre, :apellido, :telefono, :rol, :estado, :username, :password_plain, datetime('now'))
                 """,
                 {
                     "identificacion": identificacion,
@@ -96,7 +94,7 @@ def create_user(identificacion: str, nombre: str, apellido: str,
                     "rol": "student",
                     "estado": "Activo",
                     "username": username,
-                    "password_hash": password_hash,
+                    "password_plain": password_plain,  # sin hash
                 }
             )
             new_id = db.execute("SELECT last_insert_rowid() AS id").fetchone()["id"]
@@ -141,7 +139,7 @@ def authenticate_user(username: str, password_plain: str) -> SimpleNamespace:
                 raise ValueError("Tu usuario está inactivo. Contacta al administrador.")
 
             ph = str(row["password_hash"] or "")
-            if not ph or not pbkdf2_sha256.verify(password_plain, ph):
+            if password_plain != ph:
                 raise ValueError("Usuario o contraseña incorrectos.")
 
             return SimpleNamespace(

@@ -1,26 +1,42 @@
 import flet as ft
-from src.views.login import LoginAPP
+import asyncio
 
-# Fuerza inclusión de certifi en el bundle y asegura ruta de certificados en runtime 
-try:
-    import os
-    import certifi  # noqa: F401  (referencia explícita para empaquetado)
-    os.environ.setdefault("SSL_CERT_FILE", certifi.where())
-except Exception:
-    pass
-try:
-    # Inicializa la base local (SQLite) en el arranque.
-    from db.db import init_db
-    init_db(create_all=True)
-except Exception as _e:
-    # No detenemos la app si la inicialización falla; la UI seguirá cargando.
-    # Puedes revisar logs si necesitas depurar la base de datos.
-    pass
+from src.views.splash import SplashUI
+from src.modules.login.auth_controller import AuthController
+
 
 def main(page: ft.Page):
-    page.window.width = 390
-    page.window.height = 670
-    LoginAPP(page)
+    # Usar dimensiones del dispositivo; evitar tamaños fijos
+    page.window.full_screen = False
+    page.window.title_bar_hidden = False
+    page.window.title_bar_buttons_hidden = False
+    page.padding = 0
+
+    # Mostrar el Splash desde su componente
+    page.views.clear()
+    splash = SplashUI(page)
+    page.views.append(ft.View(route="/splash", controls=[splash]))
+    page.update()
+
+    # Mostrar el login justo después del splash sin esperas extra
+    async def go_login():
+        await asyncio.sleep(1.0)  # duración total visible del splash
+
+        def mount():
+            page.views.clear()
+            AuthController(page)
+
+        if hasattr(page, "run_on_idle"):
+            page.run_on_idle(mount)
+        else:
+            mount()
+
+    try:
+        page.run_task(go_login)
+    except AssertionError:
+        # compatibilidad con firmas antiguas
+        page.run_task(go_login())
+
 
 if __name__ == "__main__":
     ft.app(target=main, view=ft.AppView.FLET_APP)
