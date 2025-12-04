@@ -138,30 +138,41 @@ class LoginUI(ft.Column):
 
         C = getattr(ft, "colors", None) or getattr(ft, "Colors", None)
         PRIMARY = getattr(C, "BLUE_700", getattr(C, "BLUE", None))
+        PRIMARY_LIGHT = getattr(C, "BLUE_600", getattr(C, "BLUE", None))
         ACCENT = getattr(C, "AMBER_400", None)
+        ACCENT_LIGHT = getattr(C, "AMBER_300", None)
         TEXT_MUTED = getattr(C, "GREY_600", None)
-        BORDER = getattr(C, "GREY_400", None)
+        TEXT_SECONDARY = getattr(C, "GREY_700", None)
+        BORDER = getattr(C, "GREY_300", None)
+        BORDER_FOCUS = getattr(C, "BLUE_500", None)
         BG_PAGE = getattr(C, "GREY_50", None)
+        BG_CARD = getattr(C, "WHITE", None)
         ERROR = getattr(C, "RED_600", getattr(C, "RED", None))
+        SUCCESS = getattr(C, "GREEN_600", getattr(C, "GREEN", None))
 
         self.page.title = "Login"
-        self.page.padding = ft.padding.only(top=40, bottom=24, left=16, right=16)
+        self.page.padding = ft.padding.only(top=20, bottom=20, left=16, right=16)
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
         self.page.scroll = ft.ScrollMode.AUTO
         self.page.bgcolor = BG_PAGE
 
-        # ----- helpers de UI -----
+        # ----- helpers de UI mejorados -----
         def field(**kw):
             return ft.TextField(
                 width=420,
-                border_radius=12,
+                border_radius=16,
                 border_color=BORDER,
                 focused_border_color=PRIMARY,
+                border_width=1.5,
+                focused_border_width=2,
                 cursor_color=PRIMARY,
-                hint_style=ft.TextStyle(size=15, color=TEXT_MUTED),
-                text_style=ft.TextStyle(size=16),
-                content_padding=ft.padding.symmetric(14, 16),
+                cursor_width=2,
+                hint_style=ft.TextStyle(size=15, color=TEXT_MUTED, weight=ft.FontWeight.W_400),
+                text_style=ft.TextStyle(size=16, weight=ft.FontWeight.W_500),
+                content_padding=ft.padding.symmetric(18, 20),
+                bgcolor=BG_CARD,
+                filled=True,
                 **kw,
             )
 
@@ -169,18 +180,18 @@ class LoginUI(ft.Column):
             if self._validate_all():
                 self.controller.vefCredencialesUser(e, self.user.value.strip(), self.password.value)
 
-        # ----- Campos -----
+        # ----- Campos mejorados -----
         self.user = field(
             hint_text="Ingresa tu Usuario",
             autofocus=True,
             value=remembered_username,
-            prefix_icon=ft.Icons.PERSON_2_OUTLINED,
+            prefix_icon=ft.Icons.PERSON_OUTLINE_ROUNDED,
         )
         self.password = field(
             hint_text="Ingresa tu Contraseña",
             password=True,
             can_reveal_password=True,
-            prefix_icon=ft.Icons.LOCK_OUTLINE,
+            prefix_icon=ft.Icons.LOCK_OUTLINE_ROUNDED,
         )
 
         # Validaciones en tiempo real
@@ -193,101 +204,162 @@ class LoginUI(ft.Column):
         self.user.on_submit = lambda e: self.password.focus()
         self.password.on_submit = submit_if_valid
 
-        self.remember = ft.Checkbox(label="Recordarme", value=bool(remembered_username))
+        # Checkbox mejorado
+        self.remember = ft.Checkbox(
+            label="Recordarme",
+            value=bool(remembered_username),
+            fill_color=PRIMARY,
+            check_color=getattr(C, "WHITE", None),
+            label_style=ft.TextStyle(size=14, color=TEXT_SECONDARY),
+        )
 
+        # Botón de olvidar contraseña mejorado
         forgot_btn = ft.TextButton(
             "¿Olvidaste tu contraseña?",
             on_click=lambda e: self._info("Recuperación de contraseña no implementada aún."),
-            style=ft.ButtonStyle(color={ft.ControlState.DEFAULT: PRIMARY}),
+            style=ft.ButtonStyle(
+                color={ft.ControlState.DEFAULT: PRIMARY},
+                overlay_color={ft.ControlState.HOVERED: ft.colors.with_opacity(0.1, PRIMARY) if hasattr(ft, "colors") else None},
+            ),
         )
 
-        # ----- Botones -----
+        # ----- Botones mejorados -----
         try:
             from ..utils.buttonLogin import ButtonLogin
             self.login_btn = ButtonLogin("Ingresar", on_click=submit_if_valid)
         except Exception:
             self.login_btn = ft.FilledButton(
                 "Ingresar",
+                icon=ft.Icons.LOGIN_ROUNDED,
                 on_click=submit_if_valid,
                 style=ft.ButtonStyle(
                     bgcolor={ft.ControlState.DEFAULT: PRIMARY},
-                    color=getattr(C, "WHITE", None),
-                    padding=ft.padding.symmetric(14, 0),
-                    shape=ft.RoundedRectangleBorder(radius=26),
-                    elevation=6,
+                    color={ft.ControlState.DEFAULT: getattr(C, "WHITE", None)},
+                    overlay_color={ft.ControlState.HOVERED: PRIMARY_LIGHT},
+                    padding=ft.padding.symmetric(18, 0),
+                    shape=ft.RoundedRectangleBorder(radius=16),
+                    elevation={ft.ControlState.DEFAULT: 4, ft.ControlState.HOVERED: 8},
+                    animation_duration=200,
                 ),
             )
         self.login_btn.expand = True
 
         self.register_btn = ft.OutlinedButton(
-            "Regístrate aquí",
+            "Crear cuenta nueva",
+            icon=ft.Icons.PERSON_ADD_ROUNDED,
             on_click=self.controller.ir_register,
             style=ft.ButtonStyle(
-                side={ft.ControlState.DEFAULT: ft.BorderSide(1.2, PRIMARY)},
-                color=PRIMARY,
-                shape=ft.RoundedRectangleBorder(radius=26),
-                padding=ft.padding.symmetric(12, 0),
+                side={ft.ControlState.DEFAULT: ft.BorderSide(1.5, PRIMARY)},
+                color={ft.ControlState.DEFAULT: PRIMARY},
+                overlay_color={ft.ControlState.HOVERED: ft.colors.with_opacity(0.1, PRIMARY) if hasattr(ft, "colors") else None},
+                shape=ft.RoundedRectangleBorder(radius=16),
+                padding=ft.padding.symmetric(16, 0),
+                animation_duration=200,
             ),
         )
         self.register_btn.expand = True
 
-        title = ft.Text("Bienvenido", size=26, weight=ft.FontWeight.W_700)
-        subtitle = ft.Text("Inicia sesión para continuar", size=14, color=TEXT_MUTED)
+        # Header mejorado con gradiente sutil
+        title = ft.Text(
+            "Bienvenido de nuevo",
+            size=32,
+            weight=ft.FontWeight.W_700,
+            color=TEXT_SECONDARY,
+        )
+        subtitle = ft.Text(
+            "Inicia sesión para acceder a tu cuenta",
+            size=15,
+            color=TEXT_MUTED,
+            weight=ft.FontWeight.W_400,
+        )
 
+        # Badge de seguridad mejorado
         header_badge = ft.Container(
-            bgcolor=ft.colors.with_opacity(0.10, ACCENT) if hasattr(ft, "colors") else None,
-            padding=8,
+            bgcolor=ft.colors.with_opacity(0.12, ACCENT) if hasattr(ft, "colors") else None,
+            padding=ft.padding.symmetric(12, 16),
             border_radius=12,
+            border=ft.border.all(1, ft.colors.with_opacity(0.2, ACCENT) if hasattr(ft, "colors") else None),
             content=ft.Row(
-                [ft.Icon(
-                    ft.Icons.VERIFIED_USER,
-                    size=20, color=ACCENT
-                ),
-                ft.Text(
-                    "Acceso seguro",
-                    size=12,
-                    color=TEXT_MUTED
-                )],
-                spacing=6,
+                [
+                    ft.Icon(
+                        ft.Icons.VERIFIED_USER_ROUNDED,
+                        size=22,
+                        color=ACCENT,
+                    ),
+                    ft.Text(
+                        "Conexión segura y encriptada",
+                        size=13,
+                        color=TEXT_SECONDARY,
+                        weight=ft.FontWeight.W_500,
+                    )
+                ],
+                spacing=8,
                 alignment=ft.MainAxisAlignment.START,
             ),
         )
 
-        header = ft.Column([title, subtitle, ft.Divider(), header_badge], spacing=6)
+        header = ft.Column(
+            [
+                ft.Container(
+                    content=ft.Column([title, subtitle], spacing=4),
+                    padding=ft.padding.only(bottom=8),
+                ),
+                header_badge,
+            ],
+            spacing=16,
+            horizontal_alignment=ft.CrossAxisAlignment.START,
+        )
 
+        # Meta row mejorado
         meta_row = ft.Row(
             [self.remember, ft.Container(expand=True), forgot_btn],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
         )
 
+        # Botones con mejor espaciado
         buttons_col = ft.Column(
             [self.login_btn, self.register_btn],
-            spacing=12,
-            horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
-        )
-
-        card_body = ft.Column(
-            controls=[
-                header,
-                ft.Container(height=6),
-                self.user,
-                self.password,
-                meta_row,
-                ft.Divider(),
-                buttons_col,
-            ],
             spacing=14,
             horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
         )
 
+        # Card body mejorado
+        card_body = ft.Column(
+            controls=[
+                header,
+                ft.Container(height=24),
+                self.user,
+                ft.Container(height=4),
+                self.password,
+                ft.Container(height=8),
+                meta_row,
+                ft.Container(height=20),
+                buttons_col,
+            ],
+            spacing=0,
+            horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
+        )
+
+        # Card con sombra mejorada
         card = ft.Card(
-            elevation=8,
-            surface_tint_color=getattr(C, "WHITE", None),
-            content=ft.Container(width=520, padding=24, content=card_body),
+            elevation=12,
+            shadow_color=ft.colors.with_opacity(0.15, getattr(C, "BLACK", None)) if hasattr(ft, "colors") else None,
+            surface_tint_color=BG_CARD,
+            content=ft.Container(
+                width=520,
+                padding=32,
+                content=card_body,
+            ),
         )
 
         self.controls = [
-            ft.Container(expand=True, alignment=ft.alignment.center, content=card)
+            ft.Container(
+                expand=True,
+                alignment=ft.alignment.center,
+                content=card,
+                padding=ft.padding.all(20),
+            )
         ]
 
         # ==== MÉTODOS DE VALIDACIÓN (UI) ====

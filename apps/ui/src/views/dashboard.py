@@ -2,6 +2,7 @@
 from __future__ import annotations
 import flet as ft
 from typing import List, Dict, Any, Optional
+from .nav_bar import build_navigation_bar
 
 
 class DashboardUI(ft.Column):
@@ -97,8 +98,16 @@ class DashboardUI(ft.Column):
             expand=True,
         )
 
+        # Navbar
+        navbar = build_navigation_bar(
+            page=self.page,
+            selected_index=0,
+            on_change=None
+        )
+
         self.controls = [
-            ft.Container(expand=True, alignment=ft.alignment.top_center, content=body)
+            ft.Container(expand=True, alignment=ft.alignment.top_center, content=body),
+            navbar
         ]
 
         self.page.update()
