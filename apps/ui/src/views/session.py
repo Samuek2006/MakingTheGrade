@@ -16,7 +16,7 @@ class RegisterUI(ft.Column):
 
         # ---------- Config opcional de página ----------
         self.page.title = "Registro"
-        self.page.padding = ft.padding.only(top=32, bottom=32, left=16, right=16)
+        self.page.padding = 0
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
         self.page.scroll = ft.ScrollMode.AUTO
@@ -28,7 +28,7 @@ class RegisterUI(ft.Column):
 
         def field(**kw):
             return ft.TextField(
-                width=420,
+                expand=True,  # Se adapta al ancho disponible
                 border_radius=12,
                 border_color=getattr(C, "GREY_400", None),
                 focused_border_color=PRIMARY,
@@ -123,11 +123,23 @@ class RegisterUI(ft.Column):
         card = ft.Card(
             elevation=8,
             surface_tint_color=getattr(C, "WHITE", None),
-            content=ft.Container(width=520, padding=24, content=form),
+            content=ft.Container(
+                padding=ft.padding.symmetric(horizontal=24, vertical=24),
+                content=form,
+            ),
         )
 
         self.controls = [
-            ft.Container(expand=True, alignment=ft.alignment.center, content=card)
+            ft.Container(
+                expand=True,
+                alignment=ft.alignment.center,
+                content=ft.Container(
+                    content=card,
+                    width=520,  # Ancho fijo para pantallas grandes
+                    padding=ft.padding.symmetric(horizontal=16, vertical=20),
+                ),
+                padding=ft.padding.symmetric(horizontal=16),  # Padding adicional para móviles
+            )
         ]
 
 class LoginUI(ft.Column):
@@ -151,16 +163,16 @@ class LoginUI(ft.Column):
         SUCCESS = getattr(C, "GREEN_600", getattr(C, "GREEN", None))
 
         self.page.title = "Login"
-        self.page.padding = ft.padding.only(top=20, bottom=20, left=16, right=16)
+        self.page.padding = 0
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
         self.page.scroll = ft.ScrollMode.AUTO
         self.page.bgcolor = BG_PAGE
 
-        # ----- helpers de UI mejorados -----
+        # ----- helpers de UI mejorados con responsive -----
         def field(**kw):
             return ft.TextField(
-                width=420,
+                expand=True,  # Se adapta al ancho disponible
                 border_radius=16,
                 border_color=BORDER,
                 focused_border_color=PRIMARY,
@@ -341,14 +353,16 @@ class LoginUI(ft.Column):
             horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
         )
 
-        # Card con sombra mejorada
+        # Card con sombra mejorada y responsive
         card = ft.Card(
             elevation=12,
             shadow_color=ft.colors.with_opacity(0.15, getattr(C, "BLACK", None)) if hasattr(ft, "colors") else None,
             surface_tint_color=BG_CARD,
             content=ft.Container(
-                width=520,
-                padding=32,
+                padding=ft.padding.symmetric(
+                    horizontal=24,  # Padding horizontal responsive
+                    vertical=32
+                ),
                 content=card_body,
             ),
         )
@@ -357,8 +371,15 @@ class LoginUI(ft.Column):
             ft.Container(
                 expand=True,
                 alignment=ft.alignment.center,
-                content=card,
-                padding=ft.padding.all(20),
+                content=ft.Container(
+                    content=card,
+                    width=520,  # Ancho fijo para pantallas grandes
+                    padding=ft.padding.symmetric(
+                        horizontal=16,  # Padding responsive
+                        vertical=20
+                    ),
+                ),
+                padding=ft.padding.symmetric(horizontal=16),  # Padding adicional para móviles
             )
         ]
 

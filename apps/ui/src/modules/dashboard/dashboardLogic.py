@@ -14,6 +14,7 @@ class DashboardLogic:
         self.page = page
         self.user = user or {}
         self.api = RestClient(base_url=URL_API)
+        self._exams_data: Dict[str, Dict[str, Any]] = {}  # Cache de datos completos de exámenes
 
     def _normalize_item(self, raw: Dict[str, Any]) -> Dict[str, Any]:
         """Map arbitrary payload to UI-friendly keys.
@@ -22,9 +23,10 @@ class DashboardLogic:
           - id
           - titulo
           - descripcion
+          - full_data: datos completos del examen (para pasarlo al ExamView)
         """
         if not isinstance(raw, dict):
-            return {"id": None, "titulo": "Prueba", "descripcion": ""}
+            return {"id": None, "titulo": "Prueba", "descripcion": "", "full_data": None}
 
         # Try common variants from the provided example
         titulo = (
@@ -43,6 +45,7 @@ class DashboardLogic:
             "id": raw.get("id"),
             "titulo": titulo,
             "descripcion": descripcion,
+            "full_data": raw,  # Guardar los datos completos
         }
 
     # Cargar dinamicamente las pruebas desde la API
@@ -57,9 +60,17 @@ class DashboardLogic:
             ok, data, status, err = self.api.get(path)
             if ok and isinstance(data, list):
                 items = [self._normalize_item(d) for d in data]
+                # Guardar también los datos completos en el objeto para acceso rápido
+                self._exams_data = {item["id"]: item["full_data"] for item in items if item["id"]}
                 break
 
         return items
+    
+    def get_exam_data(self, exam_id: str) -> Dict[str, Any] | None:
+        """Obtiene los datos completos de un examen por su ID"""
+        if hasattr(self, "_exams_data"):
+            return self._exams_data.get(exam_id) or self._exams_data.get(str(exam_id))
+        return None
 
     #Funcion para entrar a cada una de las pruebas cuando esten disponibles
     def on_nav_change(self, index: int):

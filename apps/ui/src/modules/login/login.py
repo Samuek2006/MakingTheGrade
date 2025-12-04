@@ -28,28 +28,23 @@ class LoginLogic:
 
     # === Helpers de UI ===
     def show_info(self, msg: str, is_error: bool = False):
+        """Muestra un mensaje en snackbar - formato simple que funciona"""
         C = getattr(ft, "colors", None) or getattr(ft, "Colors", None)
-        bg_color = getattr(C, "RED_600", getattr(C, "RED", None)) if is_error else None
         
-        try:
+        # Formato simple como en otras partes del código
+        if is_error:
+            # Para errores: fondo rojo, texto blanco
             self.page.snack_bar = ft.SnackBar(
-                content=ft.Text(msg, color=getattr(C, "WHITE", "#FFFFFF") if is_error else None),
-                bgcolor=bg_color,
-                duration=5000 if is_error else 3000,
-                action="OK" if is_error else None,
-                action_color=getattr(C, "WHITE", "#FFFFFF") if is_error else None,
+                ft.Text(msg, color=getattr(C, "WHITE", "#FFFFFF")),
+                bgcolor=getattr(C, "RED_600", getattr(C, "RED", None)),
+                duration=5000,
             )
-            self.page.snack_bar.open = True
-            self.page.update()
-        except Exception as ex:
-            # Fallback simple
-            print(f"Error en show_info: {ex}")
-            try:
-                self.page.snack_bar = ft.SnackBar(ft.Text(msg), bgcolor=bg_color)
-                self.page.snack_bar.open = True
-                self.page.update()
-            except:
-                pass
+        else:
+            # Para info normal
+            self.page.snack_bar = ft.SnackBar(ft.Text(msg))
+        
+        self.page.snack_bar.open = True
+        self.page.update()
     
     def show_loading(self, message: str = "Verificando credenciales..."):
         """Muestra el overlay de carga"""
@@ -65,61 +60,23 @@ class LoginLogic:
         self.loading_overlay.show()
         self.page.update()
     
+    def _remove_overlay(self):
+        """Remueve el overlay completamente de forma inmediata"""
+        try:
+            # Cerrar el overlay
+            self.loading_overlay.opacity = 0.0
+            self.loading_overlay.visible = False
+            # Remover del overlay de la página
+            if hasattr(self.page, 'overlay') and self.loading_overlay in self.page.overlay:
+                self.page.overlay.remove(self.loading_overlay)
+            # Forzar update
+            self.page.update()
+        except Exception as e:
+            print(f"Error removiendo overlay: {e}")
+    
     def hide_loading(self):
         """Oculta el overlay de carga"""
-        self.loading_overlay.hide()
-        self.page.update()
-        
-        # Remover del overlay después de la animación usando un timer de Flet
-        def remove_overlay(e=None):
-            try:
-                if self.loading_overlay in self.page.overlay:
-                    self.page.overlay.remove(self.loading_overlay)
-                self.loading_overlay.visible = False
-                self.page.update()
-            except:
-                pass
-        
-        # Usar un timer de Flet para remover después de 300ms (duración de la animación)
-        try:
-            timer = ft.Timer(interval=300, once=True, on_tick=remove_overlay)
-            self.page.overlay.append(timer)
-        except:
-            remove_overlay()
-    
-    def _show_error_after_loading(self, message: str):
-        """Muestra un error después de ocultar el overlay"""
-        def show_error(e=None):
-            try:
-                C = getattr(ft, "colors", None) or getattr(ft, "Colors", None)
-                bg_color = getattr(C, "RED_600", getattr(C, "RED", None))
-                
-                # Asegurarse de que el snackbar se muestre correctamente
-                self.page.snack_bar = ft.SnackBar(
-                    content=ft.Text(message, color=getattr(C, "WHITE", "#FFFFFF")),
-                    bgcolor=bg_color,
-                    duration=5000,  # 5 segundos para errores
-                    action="OK",
-                    action_color=getattr(C, "WHITE", "#FFFFFF"),
-                )
-                self.page.snack_bar.open = True
-                self.page.update()
-            except Exception as ex:
-                # Fallback simple
-                print(f"Error mostrando snackbar: {ex}")
-        
-        # Esperar un poco para que el overlay se oculte completamente
-        try:
-            error_timer = ft.Timer(interval=400, once=True, on_tick=show_error)
-            self.page.overlay.append(error_timer)
-        except:
-            # Si el timer falla, mostrar directamente después de un pequeño delay
-            import time
-            import threading
-            def delayed_show():
-                time.sleep(0.4)
-                self.page.run_task(show_error)
-            threading.Thread(target=delayed_show, daemon=True).start()
+        self._remove_overlay()
 
     # === Navegación ===
     def ir_register(self, e=None):
@@ -137,8 +94,12 @@ class LoginLogic:
             return
 
         # Fallback: sin router, monta directo (con lógica para cargar pruebas)
-        self.page.clean()
-        self.page.add(DashboardUI(self.page, user=user_obj, logic=DashboardLogic(self.page, user=user_obj)))
+        self.page.views.clear()  # Limpiar vistas en lugar de clean()
+        dash_logic = DashboardLogic(self.page, user=user_obj)
+        dash_ui = DashboardUI(self.page, user=user_obj, logic=dash_logic, controller=self.router)
+        view = ft.View(route="/dashboard", controls=[dash_ui])
+        self.page.views.append(view)
+        self.page.update()
 
     # === Verificación de credenciales ===
     def vefCredencialesUser(self, e, user_val: str | None = None, pwd_val: str | None = None):
@@ -168,21 +129,59 @@ class LoginLogic:
         self.show_loading("Verificando credenciales...")
         self.page.update()
 
+        # 1) Buscar por username
+        self.loading_overlay.loading_text.value = "Buscando usuario..."
+        self.loading_overlay.message = "Buscando usuario..."
+        self.page.update()
+        
+        # Pequeño delay para que se vea la animación de "Buscando usuario..."
+        import threading
+        import time
+        
+        # Usar threading para no bloquear, pero esperar un poco
+        def delayed_search():
+            time.sleep(0.8)  # Esperar 0.8 segundos para que se vea la animación
+            try:
+                ok_u, users, status_u, err_u = self.api.get("users", params={"search": user})
+                # Procesar resultado en el hilo principal usando async wrapper
+                async def process_search():
+                    self._process_user_search(ok_u, users, status_u, err_u, user, pwd)
+                self.page.run_task(process_search)
+            except Exception as ex:
+                # Manejar error usando async wrapper
+                async def handle_error():
+                    self._handle_search_error(ex)
+                self.page.run_task(handle_error)
+        
+        threading.Thread(target=delayed_search, daemon=True).start()
+    
+    def _handle_search_error(self, ex):
+        """Maneja errores en la búsqueda de usuario"""
+        self._remove_overlay()
+        self._busy = False
+        if getattr(self.ui, "login_btn", None) is not None:
+            self.ui.login_btn.disabled = False
+        self.page.update()
+        C = getattr(ft, "Colors", None) or getattr(ft, "colors", None)
+        self.page.snack_bar = ft.SnackBar(
+            ft.Text(f"Error inesperado: {ex}", color=getattr(C, "WHITE", "#FFFFFF")),
+            bgcolor=getattr(C, "RED_600", getattr(C, "RED", None)),
+            duration=5000,
+        )
+        self.page.snack_bar.open = True
+        self.page.update()
+    
+    def _process_user_search(self, ok_u, users, status_u, err_u, user, pwd):
+        """Procesa el resultado de la búsqueda de usuario"""
         try:
-            # 1) Buscar por username
-            self.loading_overlay.loading_text.value = "Buscando usuario..."
-            self.loading_overlay.message = "Buscando usuario..."
-            self.page.update()
-            
-            ok_u, users, status_u, err_u = self.api.get("users", params={"search": user})
             if not ok_u:
-                # Ocultar overlay primero
-                self.loading_overlay.opacity = 0.0
-                self.loading_overlay.visible = False
-                if self.loading_overlay in self.page.overlay:
-                    self.page.overlay.remove(self.loading_overlay)
-                self.page.update()
-                # Mostrar error inmediatamente
+                # Ocultar overlay completamente
+                self._remove_overlay()
+                # Resetear estado de busy
+                self._busy = False
+                if getattr(self.ui, "login_btn", None) is not None:
+                    self.ui.login_btn.disabled = False
+                # Mostrar error
                 self.show_info(f"Error consultando usuarios (status {status_u}). {err_u or ''}", is_error=True)
                 return
 
@@ -190,18 +189,33 @@ class LoginLogic:
             data = users or []
             usr = next((u for u in data if u.get("username") == user), None)
             if not usr:
-                # Ocultar overlay primero
-                self.loading_overlay.opacity = 0.0
-                self.loading_overlay.visible = False
-                if self.loading_overlay in self.page.overlay:
-                    self.page.overlay.remove(self.loading_overlay)
-                # Resaltar el campo de usuario con error
-                if getattr(self.ui, "user", None) is not None:
-                    self.ui.user.error_text = "Usuario no encontrado"
-                    self.ui.user.focus()
+                # Asegurarse de que el overlay esté visible y mostrar error
+                if self.loading_overlay not in self.page.overlay:
+                    self.page.overlay.append(self.loading_overlay)
+                self.loading_overlay.visible = True
+                self.loading_overlay.opacity = 1.0
                 self.page.update()
-                # Mostrar error inmediatamente
-                self.show_info("El usuario ingresado no existe. Por favor, verifica tu usuario.", is_error=True)
+                
+                # Mostrar error en la animación (X roja con mensaje)
+                # Duración suficiente para que se vea bien
+                duration = 2000  # 2 segundos
+                self.loading_overlay.show_error(duration=duration)
+                
+                # Resetear estado de busy después del error
+                def reset_busy():
+                    self._busy = False
+                    if getattr(self.ui, "login_btn", None) is not None:
+                        self.ui.login_btn.disabled = False
+                    self.page.update()
+                
+                # Resetear después de que se oculte el error
+                try:
+                    reset_timer = ft.Timer(interval=duration + 100, once=True, on_tick=lambda e: reset_busy())
+                    self.page.overlay.append(reset_timer)
+                except:
+                    import threading
+                    import time
+                    threading.Thread(target=lambda: (time.sleep((duration + 100) / 1000.0), reset_busy()), daemon=True).start()
                 return
 
             # 3) Comparar contraseña (en tu registro usas 'password_hash' con la contraseña en claro)
@@ -210,58 +224,90 @@ class LoginLogic:
             self.page.update()
             
             if str(usr.get("password_hash", "")) != str(pwd):
-                # Ocultar overlay primero
-                self.loading_overlay.opacity = 0.0
-                self.loading_overlay.visible = False
-                if self.loading_overlay in self.page.overlay:
-                    self.page.overlay.remove(self.loading_overlay)
-                # Resaltar el campo de contraseña con error
-                if getattr(self.ui, "password", None) is not None:
-                    self.ui.password.error_text = "Contraseña incorrecta"
-                    self.ui.password.focus()
+                # Asegurarse de que el overlay esté visible y mostrar error
+                if self.loading_overlay not in self.page.overlay:
+                    self.page.overlay.append(self.loading_overlay)
+                self.loading_overlay.visible = True
+                self.loading_overlay.opacity = 1.0
                 self.page.update()
-                # Mostrar error inmediatamente
-                self.show_info("La contraseña ingresada es incorrecta. Por favor, intenta nuevamente.", is_error=True)
+                
+                # Mostrar error en la animación (X roja con mensaje)
+                # Duración suficiente para que se vea bien
+                duration = 2000  # 2 segundos
+                self.loading_overlay.show_error(duration=duration)
+                
+                # Resetear estado de busy después del error
+                def reset_busy():
+                    self._busy = False
+                    if getattr(self.ui, "login_btn", None) is not None:
+                        self.ui.login_btn.disabled = False
+                    self.page.update()
+                
+                # Resetear después de que se oculte el error
+                try:
+                    reset_timer = ft.Timer(interval=duration + 100, once=True, on_tick=lambda e: reset_busy())
+                    self.page.overlay.append(reset_timer)
+                except:
+                    import threading
+                    import time
+                    threading.Thread(target=lambda: (time.sleep((duration + 100) / 1000.0), reset_busy()), daemon=True).start()
                 return
 
             # 4) Recordarme
             if getattr(self.ui, "remember", None) is not None and self.ui.remember.value:
-                self.page.client_storage.set("remember_username", user)
+                try:
+                    self.page.client_storage.set("remember_username", user)
+                except Exception:
+                    pass  # Ignorar errores de storage
             else:
-                self.page.client_storage.remove("remember_username")
+                try:
+                    self.page.client_storage.remove("remember_username")
+                except Exception:
+                    pass  # Ignorar errores de storage
 
-            # 5) Éxito
-            self.loading_overlay.loading_text.value = "¡Inicio de sesión exitoso!"
-            self.loading_overlay.message = "¡Inicio de sesión exitoso!"
+            # 5) Éxito - Mostrar animación de éxito y esperar antes de navegar
+            # Asegurarse de que el overlay esté visible
+            if self.loading_overlay not in self.page.overlay:
+                self.page.overlay.append(self.loading_overlay)
+            self.loading_overlay.visible = True
+            self.loading_overlay.opacity = 1.0
             self.page.update()
             
-            # Pequeño delay antes de continuar para mostrar el mensaje de éxito
-            def continue_after_delay(e=None):
-                self.hide_loading()
-                self.show_info("Inicio de sesión exitoso")
-                self.continuar(usr)
+            # Mostrar animación de éxito con callback para navegar después
+            def continue_to_dashboard():
+                try:
+                    # Resetear estado de busy
+                    self._busy = False
+                    if getattr(self.ui, "login_btn", None) is not None:
+                        self.ui.login_btn.disabled = False
+                    
+                    # Ocultar el overlay primero
+                    self._remove_overlay()
+                    
+                    # Mostrar mensaje de éxito
+                    self.show_info("¡Inicio de sesión exitoso!")
+                    
+                    # Cambiar de vista - usar run_task para asegurar que se ejecute en el hilo correcto
+                    async def navigate():
+                        self.continuar(usr)
+                    
+                    # Intentar usar run_task, si falla usar directamente
+                    try:
+                        self.page.run_task(navigate)
+                    except:
+                        # Fallback: ejecutar directamente
+                        self.continuar(usr)
+                except Exception as ex:
+                    # Intentar navegar de todas formas
+                    try:
+                        self._remove_overlay()
+                        self.continuar(usr)
+                    except:
+                        pass
             
-            # Usar timer de Flet para el delay
-            try:
-                success_timer = ft.Timer(interval=500, once=True, on_tick=continue_after_delay)
-                self.page.overlay.append(success_timer)
-            except:
-                # Fallback si el timer no funciona
-                continue_after_delay()
-                return
+            # Mostrar animación de éxito (dura 1.5 segundos por defecto)
+            self.loading_overlay.show_success(duration=1500, callback=continue_to_dashboard)
 
         except Exception as ex:
-            # Ocultar overlay primero
-            self.loading_overlay.opacity = 0.0
-            self.loading_overlay.visible = False
-            if self.loading_overlay in self.page.overlay:
-                self.page.overlay.remove(self.loading_overlay)
-            self.page.update()
-            # Mostrar error inmediatamente
-            self.show_info(f"Error inesperado: {ex}", is_error=True)
-
-        finally:
-            self._busy = False
-            if getattr(self.ui, "login_btn", None) is not None:
-                self.ui.login_btn.disabled = False
-            self.page.update()
+            # Manejar errores inesperados en el procesamiento
+            self._handle_search_error(ex)
